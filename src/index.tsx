@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Messages from './components/Messages/Messages';
+import InputBar from './components/InputBar/InputBar';
 
 const tsx: JSX.Element = (
   <div>
-    Hello world!
+    <Messages />
+    <InputBar />
   </div>
 );
 
