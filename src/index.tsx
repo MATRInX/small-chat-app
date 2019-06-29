@@ -1,15 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Messages from './components/Messages/Messages';
-import InputBar from './components/InputBar/InputBar';
+import ChatWindow from './components/ChatWindow/ChatWindow';
 import io from 'socket.io-client';
 
 export const socket = io();
 
 const tsx: JSX.Element = (
   <div>
-    <Messages />
-    <InputBar />
+    <ChatWindow />
   </div>
 );
 

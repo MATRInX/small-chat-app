@@ -35,7 +35,6 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
           onChange={this.onChange} 
         />
         <button>Send</button>
-        <div>|{ this.state.message }|</div>
       </form>
     )
   }
