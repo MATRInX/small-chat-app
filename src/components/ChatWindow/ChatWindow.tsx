@@ -1,21 +1,55 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { ChatWindowStandardProps, ChatWindowState } from './types';
 import Messages from '../Messages/Messages';
 import InputBar from '../InputBar/InputBar';
+import Socket from '../../socket/index';
 
 export default class ChatWindow extends React.Component<ChatWindowStandardProps, ChatWindowState> {
   constructor(props: ChatWindowStandardProps) {
     super(props);
     this.state = {
-      nickname: ''
+      nickname: '',
+      isLoggedIn: false
     };
+  }
+
+  onChange = (event: FormEvent<EventTarget>): void => {
+    const target = event.target as HTMLInputElement;
+    const nickname: string = target.value;
+    this.setState({ nickname });
+  }
+
+  onSubmit = (event: FormEvent<EventTarget>): void => {
+    event.preventDefault();
+    if (this.state.nickname !== '') {
+      Socket.connectToSocket();
+      this.setState({ isLoggedIn: true })
+    }
   }
 
   render() {
     return (
       <div>
-        <Messages />
-        <InputBar />
+        {
+          !this.state.isLoggedIn ? (
+            <div>
+              <form onSubmit={this.onSubmit}>
+                <input 
+                  type="text"
+                  onChange={this.onChange} 
+                  value={this.state.nickname} 
+                  placeholder="Enter your nickname..."
+                />
+                <button>Join chat room</button>
+              </form>
+            </div>
+          ) : (
+            <div>
+              <Messages />
+              <InputBar />
+            </div>
+          )
+        }
       </div>
     )
   }

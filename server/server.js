@@ -18,17 +18,20 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', function(socket) {
+  const USER_CONNECTED = 'connect user';
   const USER_DISCONNECTED = 'disconnect';
   const CHAT_MSG = 'chat message';
   
-  console.log('a user connected');
-  io.emit(CHAT_MSG, 'A new user connect to this room...');
+  socket.on(USER_CONNECTED, () => {
+    console.log('a user connected');
+    io.emit(CHAT_MSG, 'A new user connect to this room...');
+  })
 
   socket.on(USER_DISCONNECTED, () => {
     console.log('user disconnected');
     io.emit(CHAT_MSG, 'Some user have left this chat room...');
   });
-  
+
   socket.on(CHAT_MSG, message => {
     console.log('message: ', message);
     io.emit(CHAT_MSG, message);

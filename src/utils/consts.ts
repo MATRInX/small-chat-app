@@ -1,3 +1,5 @@
 export const SOCKET_EVENTS = {
-  chatMessage: 'chat message'
+  connect: 'connect user',
+  chatMessage: 'chat message',
+  disconnect: 'disconnect'
 };

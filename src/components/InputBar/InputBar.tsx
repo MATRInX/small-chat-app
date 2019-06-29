@@ -1,7 +1,8 @@
 import React, { FormEvent } from 'react';
 import { socket } from '../../index';
-import { InputBarProps, InputBarStandardProps, InputBarState } from './types';
+import { InputBarStandardProps, InputBarState } from './types';
 import { SOCKET_EVENTS } from '../../utils/consts';
+import Socket from '../../socket/index';
 
 export default class InputBar extends React.Component<InputBarStandardProps, InputBarState> {
   constructor(props: InputBarStandardProps) {
@@ -13,7 +14,8 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
 
   onSubmit = (event: FormEvent<EventTarget>): void => {
     event.preventDefault(); 
-    socket.emit(SOCKET_EVENTS.chatMessage, this.state.message);
+    // socket.emit(SOCKET_EVENTS.chatMessage, this.state.message);
+    Socket.sendMessage(this.state.message);
     this.setState({ message: '' });
   }
 
