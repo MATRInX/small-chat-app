@@ -10,8 +10,8 @@ const disconnectFromSocket = () => {
   socket.emit(SOCKET_EVENTS.disconnect);
 };
 
-const sendMessage = (message:string): void => {
-  socket.emit(SOCKET_EVENTS.chatMessage, message);
+const sendMessage = (nickname: string, message:string): void => {
+  socket.emit(SOCKET_EVENTS.chatMessage, nickname, message);
 };
 
 export default {

@@ -15,7 +15,7 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
   onSubmit = (event: FormEvent<EventTarget>): void => {
     event.preventDefault(); 
     // socket.emit(SOCKET_EVENTS.chatMessage, this.state.message);
-    Socket.sendMessage(this.state.message);
+    Socket.sendMessage(this.props.nickname, this.state.message);
     this.setState({ message: '' });
   }
 
@@ -29,6 +29,7 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
   render() {
     return (
       <form onSubmit={this.onSubmit}>
+        <span>{this.props.nickname}</span>
         <input 
           id="message" 
           type="text" 

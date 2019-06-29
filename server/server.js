@@ -32,9 +32,9 @@ io.on('connection', function(socket) {
     io.emit(CHAT_MSG, 'Some user have left this chat room...');
   });
 
-  socket.on(CHAT_MSG, message => {
-    console.log('message: ', message);
-    io.emit(CHAT_MSG, message);
+  socket.on(CHAT_MSG, (nickname, message) => {
+    console.log(nickname + ' message: ', message);
+    io.emit(CHAT_MSG, nickname, message);
   });
 
 })

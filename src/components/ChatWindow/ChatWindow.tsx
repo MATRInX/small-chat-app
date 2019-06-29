@@ -46,7 +46,7 @@ export default class ChatWindow extends React.Component<ChatWindowStandardProps,
           ) : (
             <div>
               <Messages />
-              <InputBar />
+              <InputBar nickname={this.state.nickname}/>
             </div>
           )
         }

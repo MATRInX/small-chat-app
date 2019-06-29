@@ -1,10 +1,12 @@
 // InputBarStoreProps
 // InputBarDispatchProps
 
-export interface InputBarStandardProps { };
+export interface InputBarStandardProps { 
+  nickname: string
+};
 
 export interface InputBarState {
-  message: string
+  message: string,  
 }
 
 export type InputBarProps = InputBarStandardProps & InputBarState;
