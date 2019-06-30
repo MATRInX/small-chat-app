@@ -12,7 +12,7 @@ export default class Messages extends React.Component<MessagesStandardProps, Mes
   }
 
   componentDidMount() {
-    socket.on(SOCKET_EVENTS.chatMessage, (nickname: string, message: string) => {
+    socket.on(SOCKET_EVENTS.roomMessage, (nickname: string, message: string) => {
       this.addMessage(nickname, message);
     })
   }

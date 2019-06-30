@@ -21,6 +21,8 @@ io.on('connection', function(socket) {
   const USER_CONNECTED = 'connect user';
   const USER_DISCONNECTED = 'disconnect';
   const CHAT_MSG = 'chat message';
+  const JOIN_ROOM = 'join room';
+  const ROOM_MSG = 'room message';
   
   socket.on(USER_CONNECTED, (nickname) => {
     console.log('a user connected', nickname);
@@ -36,6 +38,16 @@ io.on('connection', function(socket) {
     console.log(nickname + ' message: ', message);
     io.emit(CHAT_MSG, nickname, message);
   });
+
+  socket.on(ROOM_MSG, (roomName, nickname, message) => {
+    io.to(roomName).emit(ROOM_MSG, nickname, message);
+  })
+
+  socket.on(JOIN_ROOM, (roomName) => {
+    console.log('join room: ', roomName);
+    socket.join(roomName);
+    socket.to(roomName).emit(ROOM_MSG, 'A new user has joined the room...');
+  })
 
 })
 

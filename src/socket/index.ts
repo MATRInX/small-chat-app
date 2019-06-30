@@ -11,11 +11,17 @@ const disconnectFromSocket = () => {
 };
 
 const sendMessage = (nickname: string, message:string): void => {
-  socket.emit(SOCKET_EVENTS.chatMessage, nickname, message);
+  // socket.emit(SOCKET_EVENTS.chatMessage, nickname, message);
+  socket.emit(SOCKET_EVENTS.roomMessage, 'room', nickname, message);
 };
+
+const joinRoom = (roomName: string): void => {
+  socket.emit(SOCKET_EVENTS.joinRoom, roomName);
+}
 
 export default {
   connectToSocket,
   disconnectFromSocket,
-  sendMessage
+  sendMessage,
+  joinRoom
 };

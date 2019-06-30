@@ -24,6 +24,7 @@ export default class ChatWindow extends React.Component<ChatWindowStandardProps,
     const userNickname: string = this.state.nickname;
     if (userNickname !== '') {
       Socket.connectToSocket(userNickname);
+      Socket.joinRoom('room');
       this.setState({ isLoggedIn: true })
     }
   }
