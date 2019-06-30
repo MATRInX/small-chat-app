@@ -1,11 +1,16 @@
 import React, { FormEvent } from 'react';
-import { ChatWindowStandardProps, ChatWindowState } from './types';
+import { ChatWindowProps, ChatWindowStandardProps, ChatWindowState } from './types';
 import Messages from '../Messages/Messages';
 import InputBar from '../InputBar/InputBar';
 import Socket from '../../socket/index';
+import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
+import { addUserToRoom } from '../../redux/actions/socketIO/socketIO';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { AppState } from '../../redux/store/configureStore';
 
-export default class ChatWindow extends React.Component<ChatWindowStandardProps, ChatWindowState> {
-  constructor(props: ChatWindowStandardProps) {
+export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState> {
+  constructor(props: ChatWindowProps) {
     super(props);
     this.state = {
       nickname: '',
@@ -25,6 +30,7 @@ export default class ChatWindow extends React.Component<ChatWindowStandardProps,
     if (userNickname !== '') {
       Socket.connectToSocket(userNickname);
       Socket.joinRoom('room');
+      this.props.addUserToRoom('room', userNickname);
       this.setState({ isLoggedIn: true })
     }
   }
@@ -56,3 +62,9 @@ export default class ChatWindow extends React.Component<ChatWindowStandardProps,
     )
   }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: ChatWindowProps) => ({
+  addUserToRoom: (roomName: string, userId: string) => dispatch(addUserToRoom(roomName, userId))
+});
+
+export default connect<AppState, ChatWindowProps, any, any>(null, mapDispatchToProps)(ChatWindow);
