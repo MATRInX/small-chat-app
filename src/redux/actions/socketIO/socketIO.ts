@@ -6,21 +6,34 @@ export const socketInit: () => SocketIOActionTypes = () => ({
 });
 
 // Add user to room
-export const addUserToRoom: () => SocketIOActionTypes = () => ({
-  type: SocketIOActionTypesEnum.ADD_USER_TO_ROOM
-});
+export const addUserToRoom: (roomName: string, userId: string) => SocketIOActionTypes = 
+  (roomName, userId) => ({
+    type: SocketIOActionTypesEnum.ADD_USER_TO_ROOM,
+    roomName,
+    userId
+  });
 
 // delete user from room
-export const deleteUserFromRoom: () => SocketIOActionTypes = () => ({
-  type: SocketIOActionTypesEnum.DELETE_USER_FROM_ROOM
+export const deleteUserFromRoom: (roomName: string, userId: string) => SocketIOActionTypes = 
+  (roomName, userId) => ({
+    type: SocketIOActionTypesEnum.DELETE_USER_FROM_ROOM,
+    roomName,
+    userId
 });
 
 // send room broadcast
-export const sendRoomBroadcast: () => SocketIOActionTypes = () => ({
-  type: SocketIOActionTypesEnum.SEND_ROOM_BROADCAST
-});
+export const sendRoomBroadcast: (roomName: string, message: string) => SocketIOActionTypes = 
+  (roomName, message) => ({
+    type: SocketIOActionTypesEnum.SEND_ROOM_BROADCAST,
+    roomName,
+    message
+  });
 
 // send msg to user
-export const sendMsgToUser: () => SocketIOActionTypes = () => ({
-  type: SocketIOActionTypesEnum.SEND_MSG_TO_USER
-});
+export const sendMsgToUser: (roomName: string, userId: string, message: string) => SocketIOActionTypes = 
+  (roomName, userId, message) => ({
+    type: SocketIOActionTypesEnum.SEND_MSG_TO_USER,
+    roomName,
+    userId,
+    message
+  });

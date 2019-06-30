@@ -10,13 +10,26 @@ export enum SocketIOActionTypesEnum {
 
 type SocketIOInitAction = Action<{}>;
 
-type AddUserToRoomAction = Action<{}>;
+type AddUserToRoomAction = Action<{
+  roomName: string,
+  userId: string
+}>;
 
-type DeleteUserFromRoomAction = Action<{}>;
+type DeleteUserFromRoomAction = Action<{
+  roomName: string,
+  userId: string
+}>;
 
-type SendRoomBroadcastAction = Action<{}>;
+type SendRoomBroadcastAction = Action<{
+  roomName: string,
+  message: string
+}>;
 
-type SendMsgToUserAction = Action<{}>;
+type SendMsgToUserAction = Action<{
+  roomName: string,
+  userId: string,
+  message: string
+}>;
 
 export type SocketIOActionTypes = 
   SocketIOInitAction |
