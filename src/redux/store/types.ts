@@ -12,3 +12,11 @@ export interface User {
   userSocketId: string,
   userNickName: string
 };
+
+export interface RoomState {
+  rooms: Room[]
+};
+
+export interface OnlineUsersState {
+  users: User[]
+};
