@@ -21,8 +21,9 @@ export default class ChatWindow extends React.Component<ChatWindowStandardProps,
 
   onSubmit = (event: FormEvent<EventTarget>): void => {
     event.preventDefault();
-    if (this.state.nickname !== '') {
-      Socket.connectToSocket();
+    const userNickname: string = this.state.nickname;
+    if (userNickname !== '') {
+      Socket.connectToSocket(userNickname);
       this.setState({ isLoggedIn: true })
     }
   }

@@ -22,9 +22,9 @@ io.on('connection', function(socket) {
   const USER_DISCONNECTED = 'disconnect';
   const CHAT_MSG = 'chat message';
   
-  socket.on(USER_CONNECTED, () => {
-    console.log('a user connected');
-    io.emit(CHAT_MSG, 'A new user connect to this room...');
+  socket.on(USER_CONNECTED, (nickname) => {
+    console.log('a user connected', nickname);
+    socket.broadcast.emit(CHAT_MSG, 'A new user connect to this room...', nickname);
   })
 
   socket.on(USER_DISCONNECTED, () => {

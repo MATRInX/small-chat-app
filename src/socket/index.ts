@@ -2,8 +2,8 @@ import io from 'socket.io-client';
 import { socket } from '../index';
 import { SOCKET_EVENTS } from '../utils/consts';
 
-const connectToSocket = () => {
-  socket.emit(SOCKET_EVENTS.connect);
+const connectToSocket = (nickname: string) => {
+  socket.emit(SOCKET_EVENTS.connect, nickname);
 };
 
 const disconnectFromSocket = () => {
