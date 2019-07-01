@@ -4,7 +4,7 @@ import Messages from '../Messages/Messages';
 import InputBar from '../InputBar/InputBar';
 import Socket from '../../socket/index';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
-import { addUserToRoom } from '../../redux/actions/socketIO/socketIO';
+import { addUserToRoom } from '../../redux/actions/socketIO/room';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/store/configureStore';

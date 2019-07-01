@@ -8,14 +8,14 @@ const roomDefaultState: RoomState = {
 
 export const roomReducer: Reducer<RoomState> = 
   (state = roomDefaultState, action) => {
+    let roomIndex: number = -1;
+    state.rooms.forEach((room, index) => {
+      if (room.roomName === action.payload.roomName) {
+        roomIndex = index;
+      }          
+    });
     switch(action.type) {
       case SocketIOActionTypesEnum.ADD_USER_TO_ROOM:
-        let roomIndex: number = -1;
-        state.rooms.forEach((room, index) => {
-          if (room.roomName === action.payload.roomName) {
-            roomIndex = index;
-          }          
-        });
         if (roomIndex > -1) {
           state.rooms[roomIndex] = {
             roomName: state.rooms[roomIndex].roomName,
@@ -33,6 +33,10 @@ export const roomReducer: Reducer<RoomState> =
           }
         } 
       case SocketIOActionTypesEnum.DELETE_USER_FROM_ROOM:
+        state.rooms[roomIndex] = {
+          roomName: state.rooms[roomIndex].roomName,
+          users: [...state.rooms[roomIndex].users.filter((singleUser) => singleUser !== action.payload.userId)]
+        }
         return {
           ...state
         }
