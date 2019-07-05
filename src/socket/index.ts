@@ -10,9 +10,9 @@ const disconnectFromSocket = () => {
   socket.emit(SOCKET_EVENTS.disconnect);
 };
 
-const sendMessage = (nickname: string, message:string): void => {
+const sendMessage = (roomName: string, nickname: string, message:string): void => {
   // socket.emit(SOCKET_EVENTS.chatMessage, nickname, message);
-  socket.emit(SOCKET_EVENTS.roomMessage, 'room', nickname, message);
+  socket.emit(SOCKET_EVENTS.roomMessage, roomName, nickname, message);
 };
 
 const joinRoom = (roomName: string): void => {

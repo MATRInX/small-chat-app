@@ -2,7 +2,8 @@
 // InputBarDispatchProps
 
 export interface InputBarStandardProps { 
-  nickname: string
+  nickname: string,
+  roomName: string
 };
 
 export interface InputBarState {

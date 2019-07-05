@@ -10,7 +10,8 @@ const store = configureStore();
 
 const tsx: JSX.Element = (
   <Provider store={store}>
-    <ChatWindow />
+    <ChatWindow roomName={'jeden'}/>
+    <ChatWindow roomName={'dwa'}/>
   </Provider>
 );
 

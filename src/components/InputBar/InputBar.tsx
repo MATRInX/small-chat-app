@@ -15,7 +15,7 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
   onSubmit = (event: FormEvent<EventTarget>): void => {
     event.preventDefault(); 
     // socket.emit(SOCKET_EVENTS.chatMessage, this.state.message);
-    Socket.sendMessage(this.props.nickname, this.state.message);
+    Socket.sendMessage(this.props.roomName, this.props.nickname, this.state.message);
     this.setState({ message: '' });
   }
 

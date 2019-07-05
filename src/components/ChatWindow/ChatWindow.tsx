@@ -1,5 +1,5 @@
 import React, { FormEvent } from 'react';
-import { ChatWindowProps, ChatWindowStandardProps, ChatWindowState } from './types';
+import { ChatWindowProps, ChatWindowDispatchProps, ChatWindowState } from './types';
 import Messages from '../Messages/Messages';
 import InputBar from '../InputBar/InputBar';
 import Socket from '../../socket/index';
@@ -29,8 +29,8 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
     const userNickname: string = this.state.nickname;
     if (userNickname !== '') {
       Socket.connectToSocket(userNickname);
-      Socket.joinRoom('room');
-      this.props.addUserToRoom('room', userNickname);
+      Socket.joinRoom(this.props.roomName);
+      this.props.addUserToRoom(this.props.roomName, userNickname);
       this.setState({ isLoggedIn: true })
     }
   }
@@ -41,6 +41,7 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
         {
           !this.state.isLoggedIn ? (
             <div>
+              <h1>Room {this.props.roomName}</h1>
               <form onSubmit={this.onSubmit}>
                 <input 
                   type="text"
@@ -54,7 +55,7 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
           ) : (
             <div>
               <Messages />
-              <InputBar nickname={this.state.nickname}/>
+              <InputBar nickname={this.state.nickname} roomName={this.props.roomName}/>
             </div>
           )
         }
@@ -63,8 +64,8 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: ChatWindowProps) => ({
+const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: ChatWindowDispatchProps) => ({
   addUserToRoom: (roomName: string, userId: string) => dispatch(addUserToRoom(roomName, userId))
 });
 
-export default connect<AppState, ChatWindowProps, any, any>(null, mapDispatchToProps)(ChatWindow);
+export default connect<AppState, ChatWindowDispatchProps, any, any>(null, mapDispatchToProps)(ChatWindow);

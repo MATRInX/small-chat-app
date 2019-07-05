@@ -40,13 +40,14 @@ io.on('connection', function(socket) {
   });
 
   socket.on(ROOM_MSG, (roomName, nickname, message) => {
-    io.to(roomName).emit(ROOM_MSG, nickname, message);
+    console.log('room msg: ' + roomName + ' from : ' + nickname+ ' |');//, io.sockets.adapter.rooms);
+    socket.to(roomName).emit(ROOM_MSG, nickname, message);
   })
 
   socket.on(JOIN_ROOM, (roomName) => {
     console.log('join room: ', roomName);
     socket.join(roomName);
-    socket.to(roomName).emit(ROOM_MSG, 'A new user has joined the room...');
+    socket.to(roomName).emit(ROOM_MSG, 'A new user has joined the room...' + roomName);
   })
 
 })
