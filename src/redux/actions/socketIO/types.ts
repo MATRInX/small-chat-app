@@ -2,10 +2,12 @@ import { Action } from '../../store/types';
 
 export enum SocketIOActionTypesEnum {
   INIT = '@@INIT',
-  ADD_USER_TO_ROOM = 'ADD_USER_TO_ROOM',
-  DELETE_USER_FROM_ROOM = 'DELETE_USER_FROM_ROOM',
+  CREATE_NEW_ROOM = 'CREATE_NEW_ROOM',
+  DELETE_ROOM = 'DELETE_ROOM',
   SEND_ROOM_BROADCAST = 'SEND_ROOM_BROADCAST',
   SEND_MSG_TO_USER = 'SEND_MSG_TO_USER',
+  ADD_USER_TO_ROOM = 'ADD_USER_TO_ROOM',
+  DELETE_USER_FROM_ROOM = 'DELETE_USER_FROM_ROOM',
   SET_USER_DATA = 'SET_USER_DATA'
 };
 
@@ -13,34 +15,44 @@ type SocketIOInitAction = Action<{}>;
 
 type AddUserToRoomAction = Action<{
   roomName: string,
-  userId: string
+  socketId: string,
+  nickname: string
 }>;
 
 type DeleteUserFromRoomAction = Action<{
   roomName: string,
-  userId: string
+  socketId: string
 }>;
 
-type SendRoomBroadcastAction = Action<{
+type CreateNewRoomAction = Action<{
   roomName: string,
-  message: string
+  isFixed: boolean,
+  isPrivate: boolean
 }>;
 
-type SendMsgToUserAction = Action<{
-  roomName: string,
-  userId: string,
-  message: string
+type DeleteRoomAction = Action<{
+  roomName: string
 }>;
 
-type SetUserData = Action<{
-  userId: string,
-  userNickname: string
-}>
+// type SendRoomBroadcastAction = Action<{
+//   roomName: string,
+//   message: string
+// }>;
+
+// type SendMsgToUserAction = Action<{
+//   roomName: string,
+//   userId: string,
+//   message: string
+// }>;
+
+// type SetUserData = Action<{
+//   userId: string,
+//   userNickname: string
+// }>
 
 export type SocketIOActionTypes = 
   SocketIOInitAction |
   AddUserToRoomAction |
   DeleteUserFromRoomAction |
-  SendRoomBroadcastAction |
-  SendMsgToUserAction |
-  SetUserData;
+  CreateNewRoomAction |
+  DeleteRoomAction;

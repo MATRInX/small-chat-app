@@ -15,34 +15,31 @@ export const roomReducer: Reducer<RoomState> =
       }          
     });
     switch(action.type) {
-      case SocketIOActionTypesEnum.ADD_USER_TO_ROOM:
-        if (roomIndex > -1) {
-          state.rooms[roomIndex] = {
-            roomName: state.rooms[roomIndex].roomName,
-            users: [...state.rooms[roomIndex].users, action.payload.userId]
-          }
-          return {
-            ...state
-          }
-        } else {
-          return {
-            rooms: [...state.rooms, {
-              roomName: action.payload.roomName,
-              users: [action.payload.userId]
-            }]
-          }
-        } 
-      case SocketIOActionTypesEnum.DELETE_USER_FROM_ROOM:
-        state.rooms[roomIndex] = {
-          roomName: state.rooms[roomIndex].roomName,
-          users: [...state.rooms[roomIndex].users.filter((singleUser) => singleUser !== action.payload.userId)]
-        }
+      case SocketIOActionTypesEnum.CREATE_NEW_ROOM:
         return {
-          ...state
+          rooms: [
+            ...state.rooms,
+            {
+              roomName: action.payload.roomName,
+              isFixed: action.payload.isFixed,
+              isPrivate: action.payload.isPrivate
+            }
+          ]
+        }
+      case SocketIOActionTypesEnum.DELETE_ROOM:
+        return {
+          rooms: state.rooms.filter((room) => {
+            if (room.roomName === action.payload.roomName) {
+              return false;
+            }
+            return true;
+          })
         }
       default:
         return {
-          ...state
+          rooms: [
+            ...state.rooms
+          ]
         };
     }
   }

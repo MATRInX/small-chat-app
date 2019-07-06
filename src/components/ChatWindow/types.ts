@@ -1,7 +1,7 @@
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 // ChatWindowStateProps
 export interface ChatWindowDispatchProps {
-  addUserToRoom: (roomName: string, userId: string) => SocketIOActionTypes
+  addUserToRoom: (roomName: string, socketId: string, nickname: string) => SocketIOActionTypes
 }
 export interface ChatWindowStandardProps { 
   roomName: string

@@ -1,24 +1,40 @@
 import { SocketIOActionTypesEnum } from '../../actions/socketIO/types';
-import { User } from '../../store/types';
+import { OnlineUserState } from '../../store/types';
 import { Reducer } from 'redux';
 
-const userDefaultState: User = {
-  userSocketId: '',
-  userNickName: ''
+const userDefaultState: OnlineUserState = {
+  joinedUsers: []
 };
 
-export const userReducer: Reducer<User> = 
-  (state= userDefaultState, action) => {
+export const userReducer: Reducer<OnlineUserState> = 
+  (state = userDefaultState, action) => {
     switch(action.type) {
-      case SocketIOActionTypesEnum.SET_USER_DATA:
+      case SocketIOActionTypesEnum.ADD_USER_TO_ROOM:
         return {
-          ...state,
-          userSocketId: action.payload.userId,
-          userNickName: action.payload.userNickName
+          joinedUsers: [
+            ...state.joinedUsers,
+            { 
+              roomName: action.payload.roomName,
+              socketId: action.payload.socketId,
+              nickname: action.payload.nickname
+            }
+          ]
         }
+      case SocketIOActionTypesEnum.DELETE_USER_FROM_ROOM:
+        return {
+          joinedUsers: state.joinedUsers.filter((user) => {
+          if ((user.roomName === action.payload.roomName) &&
+             (user.socketId === action.payload.socketId)) {
+               return false;
+             }
+          return true;
+        })
+      }
       default: 
         return {
-          ...state
+          joinedUsers: [
+            ...state.joinedUsers
+          ]
         }
     }
   }

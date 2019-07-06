@@ -4,19 +4,21 @@ export interface Action<PayloadType> {
 };
 
 export interface Room {
-  roomName: string
-  users: string[]
+  roomName: string,
+  isFixed: boolean,
+  isPrivate: boolean
 };
 
 export interface User {
-  userSocketId: string,
-  userNickName: string
+  socketId: string,
+  nickname: string,
+  roomName: string
 };
 
 export interface RoomState {
   rooms: Room[]
 };
 
-export interface OnlineUsersState {
-  users: User[]
+export interface OnlineUserState {
+  joinedUsers: User[]
 };
