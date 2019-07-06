@@ -48,6 +48,16 @@ io.on('connection', function(socket) {
     console.log('join room: ', roomName);
     socket.join(roomName);
     socket.to(roomName).emit(ROOM_MSG, 'A new user has joined the room...' + roomName);
+    // console.log('my room info: ', io.sockets);
+    io.clients((error, clients) => {
+      if (error) throw error;
+      console.log('all connected clients: ',clients);
+    });
+    io.in(roomName).clients((error, clients) => {
+      if (error) throw error;
+      console.log('all connected clients: in room: '+roomName, clients);
+    });
+    console.log('socket.id: ', socket.id);
   })
 
 })
