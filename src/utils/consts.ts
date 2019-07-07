@@ -3,5 +3,8 @@ export const SOCKET_EVENTS = {
   chatMessage: 'chat message',
   disconnect: 'disconnect',
   joinRoom: 'join room',
-  roomMessage: 'room message'
+  roomMessage: 'room message',
+  getYourUserData: 'get your user data',
+  sendMyNickname: 'send my nickname',
+  addNewUserToRoom: 'add new user to room'
 };

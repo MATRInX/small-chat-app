@@ -23,6 +23,9 @@ io.on('connection', function(socket) {
   const CHAT_MSG = 'chat message';
   const JOIN_ROOM = 'join room';
   const ROOM_MSG = 'room message';
+  const GET_YOUR_USER_DATA = 'get your user data';
+  const SEND_MY_NICKNAME = 'send my nickname';
+  const ADD_NEW_USER_TO_ROOM = 'add new user to room';
   
   socket.on(USER_CONNECTED, (nickname) => {
     console.log('a user connected', nickname);
@@ -42,23 +45,36 @@ io.on('connection', function(socket) {
   socket.on(ROOM_MSG, (roomName, nickname, message) => {
     console.log('room msg: ' + roomName + ' from : ' + nickname+ ' |');//, io.sockets.adapter.rooms);
     socket.to(roomName).emit(ROOM_MSG, nickname, message);
-  })
+  });
 
-  socket.on(JOIN_ROOM, (roomName) => {
-    console.log('join room: ', roomName);
-    socket.join(roomName);
-    socket.to(roomName).emit(ROOM_MSG, 'A new user has joined the room...' + roomName);
-    // console.log('my room info: ', io.sockets);
-    io.clients((error, clients) => {
-      if (error) throw error;
-      console.log('all connected clients: ',clients);
-    });
-    io.in(roomName).clients((error, clients) => {
-      if (error) throw error;
-      console.log('all connected clients: in room: '+roomName, clients);
-    });
-    console.log('socket.id: ', socket.id);
-  })
+  socket.on(JOIN_ROOM, (newUser) => {
+    console.log('join room by: ', newUser);
+    socket.join(newUser.roomName);
+    socket.to(newUser.roomName).emit(ROOM_MSG, newUser.nickname, 'A new user has joined the room: ');
+    socket.to(newUser.roomName).emit(GET_YOUR_USER_DATA, newUser.socketId);
+    socket.to(newUser.roomName).emit(ADD_NEW_USER_TO_ROOM, newUser);
+  });
+
+  socket.on(SEND_MY_NICKNAME, (myUserData, destinationSocketId) => {
+    console.log('send my nickname: ', myUserData, destinationSocketId);
+    socket.to(destinationSocketId).emit(ADD_NEW_USER_TO_ROOM, myUserData);
+  });
+
+  // socket.on(JOIN_ROOM, (roomName) => {
+  //   console.log('join room: ', roomName);
+  //   socket.join(roomName);
+  //   socket.to(roomName).emit(ROOM_MSG, 'A new user has joined the room...' + roomName);
+  //   // console.log('my room info: ', io.sockets);
+  //   io.clients((error, clients) => {
+  //     if (error) throw error;
+  //     console.log('all connected clients: ',clients);
+  //   });
+  //   io.in(roomName).clients((error, clients) => {
+  //     if (error) throw error;
+  //     console.log('all connected clients: in room: '+roomName, clients);
+  //   });
+  //   console.log('socket.id: ', socket.id);
+  // })
 
 })
 

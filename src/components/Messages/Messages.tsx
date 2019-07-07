@@ -1,6 +1,7 @@
 import React from 'react';
 import { socket } from '../../index';
 import { MessagesStandardProps, MessagesState } from './types';
+import Socket from '../../socket/index';
 import { SOCKET_EVENTS } from '../../utils/consts';
 
 export default class Messages extends React.Component<MessagesStandardProps, MessagesState> {
@@ -12,15 +13,16 @@ export default class Messages extends React.Component<MessagesStandardProps, Mes
   }
 
   componentDidMount() {
-    socket.on(SOCKET_EVENTS.roomMessage, (nickname: string, message: string) => {
-      this.addMessage(nickname, message);
-    })
+    // socket.on(SOCKET_EVENTS.roomMessage, (nickname: string, message: string) => {
+    //   this.addMessage(nickname, message);
+    // })
+    Socket.onRoomMessage(this.addMessage);
   }
 
-  addMessage(nickname:string, message: string) {
-    const newMessages = this.state.messages;
-    newMessages.push(nickname+' '+message);
-    this.setState({ messages: newMessages});
+  addMessage = (nickname:string, message: string) => {
+    // const newMessages = this.state.messages;
+    this.state.messages.push(nickname+' '+message);
+    this.setState({ messages: this.state.messages });
   }
 
   render() {

@@ -9,6 +9,7 @@ import { addUserToRoom } from '../../redux/actions/socketIO/user';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/store/configureStore';
+import { User } from '../../redux/store/types';
 
 export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState> {
   constructor(props: ChatWindowProps) {
@@ -29,10 +30,17 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
     event.preventDefault();
     const userNickname: string = this.state.nickname;
     if (userNickname !== '') {
+      const newUser: User = {
+        roomName: this.props.roomName,
+        socketId: clientSocket.id,
+        nickname: this.state.nickname
+      };
       Socket.connectToSocket(userNickname);
-      Socket.joinRoom(this.props.roomName);
-      this.props.addUserToRoom(this.props.roomName, clientSocket.id, this.state.nickname);
-      this.setState({ isLoggedIn: true })
+      Socket.joinRoom(newUser);
+      this.props.addUserToRoom(newUser);
+      this.setState({ isLoggedIn: true });
+      Socket.onGetYourUserToSocket(newUser);
+      Socket.onNewUserInRoom(this.props.addUserToRoom);
     }
   }
 
@@ -66,8 +74,8 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: ChatWindowDispatchProps) => ({
-  addUserToRoom: (roomName: string, socketId: string, nickname: string) => 
-                  dispatch(addUserToRoom(roomName, socketId, nickname))
+  addUserToRoom: (newUser: User) => 
+                  dispatch(addUserToRoom(newUser.roomName, newUser.socketId, newUser.nickname))
 });
 
 export default connect<AppState, ChatWindowDispatchProps, any, any>(null, mapDispatchToProps)(ChatWindow);
