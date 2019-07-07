@@ -15,10 +15,6 @@ export interface User {
   roomName: string
 };
 
-export interface RoomState {
-  rooms: Room[]
-};
+export type RoomState = Room[];
 
-export interface OnlineUserState {
-  joinedUsers: User[]
-};
+export type OnlineUserState = User[];
