@@ -10,6 +10,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/store/configureStore';
 import { User } from '../../redux/store/types';
+import OnlineUsers from '../OnlineUsers/OnlineUsers';
 
 export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState> {
   constructor(props: ChatWindowProps) {
@@ -65,6 +66,7 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
             <div>
               <Messages />
               <InputBar nickname={this.state.nickname} roomName={this.props.roomName}/>
+              <OnlineUsers roomName={this.props.roomName}/>
             </div>
           )
         }
