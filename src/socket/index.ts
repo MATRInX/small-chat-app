@@ -40,7 +40,18 @@ const onRoomMessage = (fn: Function): void => {
   socket.on(SOCKET_EVENTS.roomMessage, (nickname: string, message: string) => {
     fn(nickname, message);
   })
-}
+};
+
+const emitUserTypings = (roomName: string, userNickname: string, isTyping: boolean) => {
+  socket.emit(SOCKET_EVENTS.userIsTypings, roomName, userNickname, isTyping);
+};
+
+const onUserTypings = (fn: Function) => {
+  console.log('onUserTypings');
+  socket.on(SOCKET_EVENTS.userIsTypings, (userNickname: string, isTyping: boolean) => {
+    fn(userNickname, isTyping);
+  });
+};
 
 export default {
   connectToSocket,
@@ -49,5 +60,7 @@ export default {
   joinRoom,
   onGetYourUserToSocket,
   onNewUserInRoom,
-  onRoomMessage
+  onRoomMessage,
+  emitUserTypings,
+  onUserTypings
 };

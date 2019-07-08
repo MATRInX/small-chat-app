@@ -8,8 +8,15 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
   constructor(props: InputBarStandardProps) {
     super(props);
     this.state = {
-      message: ''
+      message: '',      
+      typings: false,
+      typingsUsername: '',
+      timeout: undefined
     };
+  }
+
+  componentDidMount() {
+    Socket.onUserTypings(this.setTypingsState);
   }
 
   onSubmit = (event: FormEvent<EventTarget>): void => {
@@ -26,9 +33,28 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
     this.setState({ message });
   }
 
+  onKeydown = (event: FormEvent<EventTarget>): void => {
+    // if (this.state.typings) {
+      //  clearTimeout(this.state.timeout);
+    // }
+    clearTimeout(this.state.timeout);
+        
+    Socket.emitUserTypings(this.props.roomName, this.props.nickname, true);
+    const timeout = setTimeout(() => {
+      Socket.emitUserTypings(this.props.roomName, this.props.nickname, false);
+      console.log('timeout finished');
+    }, 5000);    
+    this.setState({ timeout })
+  }
+
+  setTypingsState = (userNickname: string, isTypings: boolean) => {
+    this.setState({ typings: isTypings, typingsUsername: userNickname });
+  }
+
   render() {
     return (
       <form onSubmit={this.onSubmit}>
+      {this.state.typings ? <div>User {`${this.state.typingsUsername}`}is typings...</div> : <div></div>}
         <span>{this.props.nickname}</span>
         <input 
           id="message" 
@@ -36,6 +62,7 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
           autoComplete="off" 
           value={this.state.message} 
           onChange={this.onChange} 
+          onKeyDown={this.onKeydown}
         />
         <button>Send</button>
       </form>

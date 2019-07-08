@@ -26,6 +26,7 @@ io.on('connection', function(socket) {
   const GET_YOUR_USER_DATA = 'get your user data';
   const SEND_MY_NICKNAME = 'send my nickname';
   const ADD_NEW_USER_TO_ROOM = 'add new user to room';
+  const USER_IS_TYPINGS = 'user is typings';
   
   socket.on(USER_CONNECTED, (nickname) => {
     console.log('a user connected', nickname);
@@ -59,6 +60,10 @@ io.on('connection', function(socket) {
     console.log('send my nickname: ', myUserData, destinationSocketId);
     socket.to(destinationSocketId).emit(ADD_NEW_USER_TO_ROOM, myUserData);
   });
+
+  socket.on(USER_IS_TYPINGS, (roomName, userNickname, isTypings) => {
+    socket.to(roomName).emit(USER_IS_TYPINGS, userNickname, isTypings);
+  })
 
   // socket.on(JOIN_ROOM, (roomName) => {
   //   console.log('join room: ', roomName);

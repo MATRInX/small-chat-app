@@ -7,7 +7,10 @@ export interface InputBarStandardProps {
 };
 
 export interface InputBarState {
-  message: string,  
+  message: string, 
+  typings: boolean,
+  typingsUsername: string,
+  timeout: any
 }
 
 export type InputBarProps = InputBarStandardProps & InputBarState;

@@ -6,5 +6,6 @@ export const SOCKET_EVENTS = {
   roomMessage: 'room message',
   getYourUserData: 'get your user data',
   sendMyNickname: 'send my nickname',
-  addNewUserToRoom: 'add new user to room'
+  addNewUserToRoom: 'add new user to room',
+  userIsTypings: 'user is typings'
 };
