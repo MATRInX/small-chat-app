@@ -30,3 +30,14 @@ export const deleteUserFromRoom: (roomName: string, socketId: string) => SocketI
     socketId
   }
 });
+
+// set user typing
+export const setUserTyping: (roomName: string, nickname: string, isTyping: boolean) => SocketIOActionTypes =
+(roomName, nickname, isTyping) => ({
+  type: SocketIOActionTypesEnum.SET_USER_TYPING,
+  payload: {
+    roomName,
+    nickname,
+    isTyping
+  }
+});

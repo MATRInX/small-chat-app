@@ -1,5 +1,13 @@
-// InputBarStoreProps
-// InputBarDispatchProps
+import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
+import { User } from '../../redux/store/types';
+
+export interface InputBarStoreProps {
+  actualUser: User
+};
+
+export interface InputBarDispatchProps {
+  setUserTyping: (roomName: string, nickname: string, isTyping: boolean) => void
+};
 
 export interface InputBarStandardProps { 
   nickname: string,
@@ -13,4 +21,4 @@ export interface InputBarState {
   timeout: any
 }
 
-export type InputBarProps = InputBarStandardProps & InputBarState;
+export type InputBarProps = InputBarStoreProps & InputBarDispatchProps & InputBarStandardProps;// & InputBarState;

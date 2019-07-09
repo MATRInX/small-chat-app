@@ -13,7 +13,8 @@ export const userReducer: Reducer<OnlineUserState> =
           { 
             roomName: action.payload.roomName,
             socketId: action.payload.socketId,
-            nickname: action.payload.nickname
+            nickname: action.payload.nickname,
+            isTyping: false
           }
         ]
       case SocketIOActionTypesEnum.DELETE_USER_FROM_ROOM:
@@ -23,7 +24,15 @@ export const userReducer: Reducer<OnlineUserState> =
                return false;
              }
           return true;
-        })
+        });
+      case SocketIOActionTypesEnum.SET_USER_TYPING:
+        return state.map(user => {
+            return {...user, 
+              isTyping: 
+              ((user.nickname === action.payload.nickname) && 
+               (user.roomName === action.payload.roomName)) ? action.payload.isTyping : user.isTyping
+            };
+        });
       default: 
         return [
           ...state

@@ -34,7 +34,8 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
       const newUser: User = {
         roomName: this.props.roomName,
         socketId: clientSocket.id,
-        nickname: this.state.nickname
+        nickname: this.state.nickname,
+        isTyping: false
       };
       Socket.connectToSocket(userNickname);
       Socket.joinRoom(newUser);

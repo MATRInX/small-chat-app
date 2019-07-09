@@ -12,7 +12,8 @@ export interface Room {
 export interface User {
   socketId: string,
   nickname: string,
-  roomName: string
+  roomName: string,
+  isTyping: boolean
 };
 
 export type RoomState = Room[];

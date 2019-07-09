@@ -1,11 +1,17 @@
 import React, { FormEvent } from 'react';
 import { socket } from '../../index';
-import { InputBarStandardProps, InputBarState } from './types';
+import { InputBarStoreProps, InputBarState, InputBarProps, InputBarDispatchProps } from './types';
 import { SOCKET_EVENTS } from '../../utils/consts';
 import Socket from '../../socket/index';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { AppState } from '../../redux/store/configureStore';
+import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
+import { setUserTyping } from '../../redux/actions/socketIO/user';
+import getActualUser from '../../redux/selectors/getActualUser';
 
-export default class InputBar extends React.Component<InputBarStandardProps, InputBarState> {
-  constructor(props: InputBarStandardProps) {
+export class InputBar extends React.Component<InputBarProps, InputBarState> {
+  constructor(props: InputBarProps) {
     super(props);
     this.state = {
       message: '',      
@@ -34,14 +40,16 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
   }
 
   onKeydown = (event: FormEvent<EventTarget>): void => {
-    // if (this.state.typings) {
-      //  clearTimeout(this.state.timeout);
-    // }
+    const {roomName, nickname, setUserTyping, actualUser} = this.props;
     clearTimeout(this.state.timeout);
-        
-    Socket.emitUserTypings(this.props.roomName, this.props.nickname, true);
+    
+    if (!actualUser.isTyping) {
+      Socket.emitUserTypings(roomName, nickname, true);
+      setUserTyping(roomName, nickname, true);
+    }
     const timeout = setTimeout(() => {
-      Socket.emitUserTypings(this.props.roomName, this.props.nickname, false);
+      Socket.emitUserTypings(roomName, nickname, false);
+      setUserTyping(roomName, nickname, false);
       console.log('timeout finished');
     }, 5000);    
     this.setState({ timeout })
@@ -49,6 +57,7 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
 
   setTypingsState = (userNickname: string, isTypings: boolean) => {
     this.setState({ typings: isTypings, typingsUsername: userNickname });
+    this.props.setUserTyping(this.props.roomName, userNickname, isTypings);
   }
 
   render() {
@@ -69,3 +78,16 @@ export default class InputBar extends React.Component<InputBarStandardProps, Inp
     )
   }
 }
+
+const mapStateToProps: (store: AppState, ownProps: InputBarProps) => InputBarStoreProps = 
+  (store, ownProps) => ({
+    actualUser: getActualUser(store.joinedUsers, ownProps.nickname, ownProps.roomName)
+  });
+
+const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: InputBarDispatchProps) => ({
+  setUserTyping: (roomName: string, nickname: string, isTyping: boolean) => {
+    dispatch(setUserTyping(roomName, nickname, isTyping))
+  }
+})
+
+export default connect<InputBarStoreProps, InputBarDispatchProps, any, any>(mapStateToProps, mapDispatchToProps)(InputBar);
