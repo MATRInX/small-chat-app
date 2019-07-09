@@ -9,6 +9,7 @@ import { AppState } from '../../redux/store/configureStore';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { setUserTyping } from '../../redux/actions/socketIO/user';
 import getActualUser from '../../redux/selectors/getActualUser';
+import getAllTypingsUsers from '../../redux/selectors/getAllTypingsUsers';
 
 export class InputBar extends React.Component<InputBarProps, InputBarState> {
   constructor(props: InputBarProps) {
@@ -63,7 +64,9 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
   render() {
     return (
       <form onSubmit={this.onSubmit}>
-      {this.state.typings ? <div>User {`${this.state.typingsUsername}`}is typings...</div> : <div></div>}
+      {this.props.typingsUsers.length > 0 ? 
+        <div>User {`${this.props.typingsUsers.map(u => u.nickname).join(',')}`} {this.props.typingsUsers.length===1 ? 'is' : 'are'} typings...</div> : 
+        <div></div>}
         <span>{this.props.nickname}</span>
         <input 
           id="message" 
@@ -81,7 +84,8 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
 
 const mapStateToProps: (store: AppState, ownProps: InputBarProps) => InputBarStoreProps = 
   (store, ownProps) => ({
-    actualUser: getActualUser(store.joinedUsers, ownProps.nickname, ownProps.roomName)
+    actualUser: getActualUser(store.joinedUsers, ownProps.nickname, ownProps.roomName),
+    typingsUsers: getAllTypingsUsers(store.joinedUsers, ownProps.nickname)
   });
 
 const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: InputBarDispatchProps) => ({

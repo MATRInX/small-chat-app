@@ -2,7 +2,8 @@ import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { User } from '../../redux/store/types';
 
 export interface InputBarStoreProps {
-  actualUser: User
+  actualUser: User,
+  typingsUsers: User[]
 };
 
 export interface InputBarDispatchProps {
