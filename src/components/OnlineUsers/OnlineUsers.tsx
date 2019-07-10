@@ -3,22 +3,30 @@ import getOnlineUsers from '../../redux/selectors/getUsersInRoom';
 import { OnlineUsersProps, OnlineUsersStoreProps } from './types';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/store/configureStore';
+import { User } from '../../redux/store/types';
+import OnlineUsersItem from '../OnlineUsersItem/OnlineUsersItem';
 
-export const OnlineUsers = (props: OnlineUsersProps) => (
-  <div><span>Online users:</span>
-    <ul>
-      {
-        props.users.length === 0 ? (
-          <span>No online users</span>
-        ) : (
-          props.users.map((user, index) => (
-            <li key={index}>{user.nickname}</li>
-          ))
-        )
-      }
-    </ul>
-  </div>
-)
+export const OnlineUsers = (props: OnlineUsersProps) => {
+  const onClickHandle = (user: User) => {
+    console.log('priv invitation have been send,,,');
+  }
+  return (
+    <div><span>Online users:</span>
+      <ul>
+        {
+          props.users.length === 0 ? (
+            <span>No online users</span>
+          ) : (
+            props.users.map((user, index) => (
+              <OnlineUsersItem key={index} user={user}/>
+              // <li key={index}>{user.nickname}<button>Priv</button></li>
+            ))
+          )
+        }
+      </ul>
+    </div>
+    )
+}
 
 const mapStateToProps: (store: AppState, ownProps: OnlineUsersProps) => OnlineUsersStoreProps = 
   (store, ownProps) => ({
