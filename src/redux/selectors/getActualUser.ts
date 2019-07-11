@@ -1,11 +1,11 @@
 import { User } from '../store/types';
 
-const getActualUser = (users: User[], nickname: string, roomName: string) => {
+const getActualUser = (users: User[], socketId: string) => {
   let actUser: User = {
     socketId: '', nickname: '', roomName: '', isTyping: false
   };
   users.map(user => {
-    if ((user.nickname === nickname) && (user.roomName === roomName)) {
+    if (user.socketId === socketId) {
       actUser = user;
     }
   });

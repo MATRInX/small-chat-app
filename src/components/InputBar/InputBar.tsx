@@ -51,7 +51,6 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
     const timeout = setTimeout(() => {
       Socket.emitUserTypings(roomName, nickname, false);
       setUserTyping(roomName, nickname, false);
-      console.log('timeout finished');
     }, 5000);    
     this.setState({ timeout })
   }
@@ -84,7 +83,7 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
 
 const mapStateToProps: (store: AppState, ownProps: InputBarProps) => InputBarStoreProps = 
   (store, ownProps) => ({
-    actualUser: getActualUser(store.joinedUsers, ownProps.nickname, ownProps.roomName),
+    actualUser: getActualUser(store.joinedUsers, socket.id),
     typingsUsers: getAllTypingsUsers(store.joinedUsers, ownProps.nickname)
   });
 

@@ -1,7 +1,9 @@
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { User } from '../../redux/store/types';
 
-// OnlineUsersItemStateProps
+export interface OnlineUsersItemStoreProps {
+  actualUser: User
+}
 export interface OnlineUsersItemDispatchProps {
   createPrivateRoom: (user:User, actualUser: User) => SocketIOActionTypes
 }
@@ -10,4 +12,7 @@ export interface OnlineUsersStandardProps {
 }
 // OnlineUsersState
 
-export type OnlineUsersItemProps = OnlineUsersItemDispatchProps & OnlineUsersStandardProps;
+export type OnlineUsersItemProps = 
+  OnlineUsersItemStoreProps & 
+  OnlineUsersItemDispatchProps & 
+  OnlineUsersStandardProps;
