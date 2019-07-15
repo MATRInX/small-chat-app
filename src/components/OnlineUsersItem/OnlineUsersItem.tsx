@@ -5,15 +5,24 @@ import * as Props from './types';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { Dispatch } from 'redux';
 import { createNewRoom } from '../../redux/actions/socketIO/room';
+import { addUserToRoom } from '../../redux/actions/socketIO/user';
 import { AppState } from '../../redux/store/configureStore';
 import getActualUser from '../../redux/selectors/getActualUser';
 import { socket } from '../../index';
+import Socket from '../../socket/index';
 
 export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
-  const { user, createPrivateRoom } = props;
-  const onClick = () => {
+  const { user, createPrivateRoom, actualUser , addUserToPrivateRoom } = props;
+  const onClick = () => {    
     console.log('send invitation to ', user);
-    createPrivateRoom(user, user);
+    const roomName: string = `private-${user.nickname}`;
+    const newUser:User = {
+      ...actualUser,
+      roomName
+    }
+    createPrivateRoom(roomName);
+    Socket.joinRoom(newUser);
+    addUserToPrivateRoom(roomName, newUser);
   }
   return (
     <li>
@@ -30,7 +39,9 @@ const mapStateToProps: (state: AppState, ownProps: Props.OnlineUsersItemProps) =
 
 const mapDispatchToProps: (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.OnlineUsersItemProps) => Props.OnlineUsersItemDispatchProps = 
   (dispatch, ownProps) => ({
-    createPrivateRoom: (user: User, actualUser: User) => dispatch(createNewRoom(`private-${user.nickname}`, false, true))
+    createPrivateRoom: (roomName: string) => dispatch(createNewRoom(roomName, false, true)),
+    addUserToPrivateRoom: (roomName:string, newUser: User) => dispatch(addUserToRoom(roomName, newUser.socketId, newUser.nickname))
   });
 
-export default connect<AppState, Props.OnlineUsersItemDispatchProps, any, any>(null, mapDispatchToProps)(OnlineUsersItem);
+export default connect<Props.OnlineUsersItemStoreProps, Props.OnlineUsersItemDispatchProps, any, any>
+  (mapStateToProps, mapDispatchToProps)(OnlineUsersItem);

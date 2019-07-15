@@ -5,7 +5,8 @@ export interface OnlineUsersItemStoreProps {
   actualUser: User
 }
 export interface OnlineUsersItemDispatchProps {
-  createPrivateRoom: (user:User, actualUser: User) => SocketIOActionTypes
+  createPrivateRoom: (roomName: string) => SocketIOActionTypes,
+  addUserToPrivateRoom: (roomName: string, newUser: User) => SocketIOActionTypes
 }
 export interface OnlineUsersStandardProps {
   user: User
