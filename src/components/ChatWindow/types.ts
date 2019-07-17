@@ -1,10 +1,12 @@
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { User } from '../../redux/store/types';
-// ChatWindowStateProps
+export interface ChatWindowStoreProps {
+  isUserLoggedInRoom: boolean
+}
 export interface ChatWindowDispatchProps {
   addUserToRoom: (newUser: User) => SocketIOActionTypes
 }
-export interface ChatWindowStandardProps { 
+export interface ChatWindowStandardProps {
   roomName: string
 };
 export interface ChatWindowState {
@@ -12,4 +14,7 @@ export interface ChatWindowState {
   isLoggedIn: boolean
 };
 
-export type ChatWindowProps = ChatWindowDispatchProps & ChatWindowStandardProps;
+export type ChatWindowProps =
+  ChatWindowStoreProps &
+  ChatWindowDispatchProps &
+  ChatWindowStandardProps;

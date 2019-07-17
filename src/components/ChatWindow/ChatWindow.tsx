@@ -1,5 +1,5 @@
 import React, { FormEvent } from 'react';
-import { ChatWindowProps, ChatWindowDispatchProps, ChatWindowState } from './types';
+import * as Props from './types';
 import Messages from '../Messages/Messages';
 import InputBar from '../InputBar/InputBar';
 import Socket from '../../socket/index';
@@ -11,15 +11,27 @@ import { connect } from 'react-redux';
 import { AppState } from '../../redux/store/configureStore';
 import { User } from '../../redux/store/types';
 import OnlineUsers from '../OnlineUsers/OnlineUsers';
+import isUserLoggedInRoom from '../../redux/selectors/isUserLoggedInRoom';
 
-export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState> {
-  constructor(props: ChatWindowProps) {
+
+export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.ChatWindowState> {
+  constructor(props: Props.ChatWindowProps) {
     super(props);
     this.state = {
       nickname: '',
       isLoggedIn: false
     };
   }
+
+  // componentDidUpdate() {
+  //   // const { userRooms, roomName } = this.props;
+  //   // let isUserInThisRoom: boolean = false;
+  //   // userRooms.forEach(singleRoomName => {
+  //   //   console.log('check room name: ', singleRoomName, roomName);
+  //   //   if (singleRoomName === roomName) isUserInThisRoom = true;
+  //   // });
+  //   // this.setState({ isLoggedIn: isUserInThisRoom });
+  // }
 
   onChange = (event: FormEvent<EventTarget>): void => {
     const target = event.target as HTMLInputElement;
@@ -47,12 +59,14 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
   }
 
   render() {
+    
+
     return (
       <div>
+        <h1>Room {this.props.roomName}</h1>
         {
-          !this.state.isLoggedIn ? (
+          !this.props.isUserLoggedInRoom ? (
             <div>
-              <h1>Room {this.props.roomName}</h1>
               <form onSubmit={this.onSubmit}>
                 <input 
                   type="text"
@@ -76,9 +90,15 @@ export class ChatWindow extends React.Component<ChatWindowProps, ChatWindowState
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: ChatWindowDispatchProps) => ({
+const mapStateToProps: (store: AppState, ownProps: Props.ChatWindowProps) => Props.ChatWindowStoreProps = 
+  (store, ownProps) => ({
+    isUserLoggedInRoom: isUserLoggedInRoom(store.joinedUsers, ownProps.roomName, clientSocket.id)
+  });
+
+const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.ChatWindowDispatchProps) => ({
   addUserToRoom: (newUser: User) => 
                   dispatch(addUserToRoom(newUser.roomName, newUser.socketId, newUser.nickname))
 });
 
-export default connect<AppState, ChatWindowDispatchProps, any, any>(null, mapDispatchToProps)(ChatWindow);
+export default connect<Props.ChatWindowStoreProps, Props.ChatWindowDispatchProps, any, any>
+  (mapStateToProps, mapDispatchToProps)(ChatWindow);
