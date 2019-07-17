@@ -27,7 +27,11 @@ export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
   return (
     <li>
       {user.nickname}
-      <button onClick={onClick}>Priv</button>
+      {
+        props.actualUser.nickname !== user.nickname ? (
+          <button onClick={onClick}>Priv</button>
+        ) : (<span></span>)
+      }
     </li>
   )
 }
