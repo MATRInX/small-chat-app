@@ -53,6 +53,18 @@ const onUserTypings = (fn: Function) => {
   });
 };
 
+const emitPrivInvitation = (actualUser: User, newUser: User) => {
+  console.log(`send invitation from ${actualUser.nickname} to ${newUser.nickname}`);
+  socket.emit(SOCKET_EVENTS.sendPrivInvitation, actualUser, newUser);
+}
+
+const onPrivInvitation = (fn: Function) => {
+  console.log(`I get invitation to priv`);
+  socket.on(SOCKET_EVENTS.sendPrivInvitation, (actualUser: User, newUser: User) => {
+    fn(actualUser, newUser);
+  });
+}
+
 export default {
   connectToSocket,
   disconnectFromSocket,
@@ -62,5 +74,7 @@ export default {
   onNewUserInRoom,
   onRoomMessage,
   emitUserTypings,
-  onUserTypings
+  onUserTypings,
+  emitPrivInvitation,
+  onPrivInvitation
 };

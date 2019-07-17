@@ -27,6 +27,7 @@ io.on('connection', function(socket) {
   const SEND_MY_NICKNAME = 'send my nickname';
   const ADD_NEW_USER_TO_ROOM = 'add new user to room';
   const USER_IS_TYPINGS = 'user is typings';
+  const PRIV_INVITATION = 'send priv invitation';
   
   socket.on(USER_CONNECTED, (nickname) => {
     console.log('a user connected', nickname);
@@ -63,6 +64,10 @@ io.on('connection', function(socket) {
 
   socket.on(USER_IS_TYPINGS, (roomName, userNickname, isTypings) => {
     socket.to(roomName).emit(USER_IS_TYPINGS, userNickname, isTypings);
+  })
+
+  socket.on(PRIV_INVITATION, (actualUser, newUser) => {
+    socket.to(newUser.socketId).emit(PRIV_INVITATION, actualUser, newUser);
   })
 
   // socket.on(JOIN_ROOM, (roomName) => {

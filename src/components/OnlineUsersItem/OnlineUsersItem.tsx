@@ -23,6 +23,7 @@ export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
     createPrivateRoom(roomName);
     Socket.joinRoom(newUser);
     addUserToPrivateRoom(roomName, newUser);
+    Socket.emitPrivInvitation(actualUser, user);
   }
   return (
     <li>
