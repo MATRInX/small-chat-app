@@ -6,6 +6,8 @@ export interface ChatAppStateProps {
 
 // ChatAppDispatchProps
 // ChatAppStandardProps
-// ChatAppState
+export interface ChatAppState {
+  isModalOpen: boolean
+}
 
 export type ChatAppProps = ChatAppStateProps;

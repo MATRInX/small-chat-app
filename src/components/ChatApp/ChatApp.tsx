@@ -5,10 +5,14 @@ import * as Props from './types';
 import { AppState } from '../../redux/store/configureStore';
 import Socket from '../../socket/index';
 import { User } from '../../redux/store/types';
+import PrivRequestModal from '../PrivRequestModal/PrivRequestModal';
 
-export class ChatApp extends Component<Props.ChatAppProps> {
+export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   constructor(props: Props.ChatAppProps) {
     super(props);
+    this.state = {
+      isModalOpen: false
+    }
   }
 
   componentDidMount() {
@@ -17,11 +21,20 @@ export class ChatApp extends Component<Props.ChatAppProps> {
 
   onPrivInvitation = (actualUser: User, newUser: User) => {
     console.log(`User ${actualUser.nickname} have ask me to join priv room - ${newUser.nickname}`);
+    this.setState({ isModalOpen: true });
+  }
+
+  closeModal = () => {
+    this.setState({ isModalOpen: false });
   }
 
   render(){
     const { rooms } = this.props;
-    return <div>
+    return <div>      
+      <PrivRequestModal 
+        isModalOpen={this.state.isModalOpen} 
+        onCloseModal={this.closeModal}
+      />
       {
         rooms.length > 0 ? (
           rooms.map((singleRoom, index) => {
