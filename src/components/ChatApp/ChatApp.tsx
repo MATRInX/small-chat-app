@@ -11,7 +11,9 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   constructor(props: Props.ChatAppProps) {
     super(props);
     this.state = {
-      isModalOpen: false
+      isModalOpen: false,
+      invitingUser: '',
+      roomName: ''
     }
   }
 
@@ -19,9 +21,13 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
     Socket.onPrivInvitation(this.onPrivInvitation);
   }
 
-  onPrivInvitation = (actualUser: User, newUser: User) => {
-    console.log(`User ${actualUser.nickname} have ask me to join priv room - ${newUser.nickname}`);
-    this.setState({ isModalOpen: true });
+  onPrivInvitation = (actualUser: User, newUser: User, roomName: string) => {
+    console.log(`User ${actualUser.nickname} have ask me to join priv room - ${newUser.nickname} room: ${roomName}`);
+    this.setState({ 
+      isModalOpen: true,
+      invitingUser: actualUser.nickname,
+      roomName: roomName
+    });
   }
 
   closeModal = () => {
@@ -34,6 +40,8 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
       <PrivRequestModal 
         isModalOpen={this.state.isModalOpen} 
         onCloseModal={this.closeModal}
+        invitingUser={this.state.invitingUser}
+        roomName={this.state.roomName}
       />
       {
         rooms.length > 0 ? (

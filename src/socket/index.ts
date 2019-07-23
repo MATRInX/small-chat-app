@@ -53,15 +53,15 @@ const onUserTypings = (fn: Function) => {
   });
 };
 
-const emitPrivInvitation = (actualUser: User, newUser: User) => {
-  console.log(`send invitation from ${actualUser.nickname} to ${newUser.nickname}`);
-  socket.emit(SOCKET_EVENTS.sendPrivInvitation, actualUser, newUser);
+const emitPrivInvitation = (actualUser: User, newUser: User, roomName: string) => {
+  console.log(`send invitation from ${actualUser.nickname} to ${newUser.nickname} room: ${roomName}`);
+  socket.emit(SOCKET_EVENTS.sendPrivInvitation, actualUser, newUser, roomName);
 }
 
 const onPrivInvitation = (fn: Function) => {
   console.log(`I get invitation to priv`);
-  socket.on(SOCKET_EVENTS.sendPrivInvitation, (actualUser: User, newUser: User) => {
-    fn(actualUser, newUser);
+  socket.on(SOCKET_EVENTS.sendPrivInvitation, (actualUser: User, newUser: User, roomName: string) => {
+    fn(actualUser, newUser, roomName);
   });
 }
 

@@ -5,9 +5,9 @@ import * as Props from './types';
 export default class PrivRequestModal extends Component<Props.PrivRequestModalProps, Props.PrivRequestModalState> {
   constructor(props: Props.PrivRequestModalProps){
     super(props);
-    this.state = {
-      isModalOpen: this.props.isModalOpen
-    }
+    // this.state = {
+    //   isModalOpen: this.props.isModalOpen
+    // }
   }
 
   // openModal = () => {
@@ -26,9 +26,11 @@ export default class PrivRequestModal extends Component<Props.PrivRequestModalPr
         isOpen={isModalOpen}
         onRequestClose={this.props.onCloseModal}
       >
-        Hello world!
+        User {this.props.invitingUser} ask you to join priv room: {this.props.roomName}
         <button onClick={this.props.onCloseModal}>Close modal</button>
       </Modal>
     </div>
   }
 }
+
+Modal.setAppElement('#app');

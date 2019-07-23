@@ -66,8 +66,8 @@ io.on('connection', function(socket) {
     socket.to(roomName).emit(USER_IS_TYPINGS, userNickname, isTypings);
   })
 
-  socket.on(PRIV_INVITATION, (actualUser, newUser) => {
-    socket.to(newUser.socketId).emit(PRIV_INVITATION, actualUser, newUser);
+  socket.on(PRIV_INVITATION, (actualUser, newUser, roomName) => {
+    socket.to(newUser.socketId).emit(PRIV_INVITATION, actualUser, newUser, roomName);
   })
 
   // socket.on(JOIN_ROOM, (roomName) => {

@@ -7,7 +7,9 @@ export interface ChatAppStateProps {
 // ChatAppDispatchProps
 // ChatAppStandardProps
 export interface ChatAppState {
-  isModalOpen: boolean
+  isModalOpen: boolean,
+  invitingUser: string,
+  roomName: string
 }
 
 export type ChatAppProps = ChatAppStateProps;
