@@ -6,14 +6,13 @@ import { AppState } from '../../redux/store/configureStore';
 import Socket from '../../socket/index';
 import { User } from '../../redux/store/types';
 import PrivRequestModal from '../PrivRequestModal/PrivRequestModal';
+import { PrivRequestModalInfo } from '../PrivRequestModal/types';
 
 export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   constructor(props: Props.ChatAppProps) {
     super(props);
     this.state = {
-      isModalOpen: false,
-      invitingUser: '',
-      roomName: ''
+      invitations: []
     }
   }
 
@@ -22,27 +21,48 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   }
 
   onPrivInvitation = (actualUser: User, newUser: User, roomName: string) => {
-    console.log(`User ${actualUser.nickname} have ask me to join priv room - ${newUser.nickname} room: ${roomName}`);
-    this.setState({ 
-      isModalOpen: true,
-      invitingUser: actualUser.nickname,
-      roomName: roomName
+    console.log(`User ${actualUser.nickname} have ask me to join priv room - ${newUser.nickname} room: ${roomName}`);    
+    this.setState(state => {
+      const newInvitation: PrivRequestModalInfo = {
+        isModalOpen: true,
+        invitingUser: actualUser.nickname,
+        roomName
+      };
+      const invitations = [...state.invitations, newInvitation];
+      return { invitations };
     });
   }
 
-  closeModal = () => {
-    this.setState({ isModalOpen: false });
+  closeModal = (indexToClose: number) => {
+    this.setState(state => {
+      const invitations = state.invitations.map((item, index) => {
+        if (index === indexToClose ) {
+          item.isModalOpen = false;
+          return item;
+        } else {
+          return item;
+        }
+      });
+      return { invitations };
+    });
   }
 
   render(){
     const { rooms } = this.props;
+    const { invitations } = this.state;
     return <div>      
-      <PrivRequestModal 
-        isModalOpen={this.state.isModalOpen} 
-        onCloseModal={this.closeModal}
-        invitingUser={this.state.invitingUser}
-        roomName={this.state.roomName}
-      />
+      {
+        (invitations.length > 0 && invitations.map((item, index) => (
+          <PrivRequestModal 
+            key={index}
+            isModalOpen={item.isModalOpen} 
+            onCloseModal={() => this.closeModal(index)}
+            invitingUser={item.invitingUser}
+            roomName={item.roomName}
+          />
+          ))
+        )
+      }      
       {
         rooms.length > 0 ? (
           rooms.map((singleRoom, index) => {

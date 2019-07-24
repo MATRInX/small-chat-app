@@ -1,4 +1,5 @@
 import { Room } from '../../redux/store/types';
+import { PrivRequestModalInfo } from  '../PrivRequestModal/types';
 
 export interface ChatAppStateProps {
   rooms: Room[]
@@ -7,9 +8,7 @@ export interface ChatAppStateProps {
 // ChatAppDispatchProps
 // ChatAppStandardProps
 export interface ChatAppState {
-  isModalOpen: boolean,
-  invitingUser: string,
-  roomName: string
+  invitations: PrivRequestModalInfo[]
 }
 
 export type ChatAppProps = ChatAppStateProps;

@@ -11,3 +11,9 @@ export interface PrivRequestModalState {
 };
 
 export type PrivRequestModalProps = PrivRequestModalStandardProps;
+
+export interface PrivRequestModalInfo {
+  isModalOpen: boolean,
+  roomName: string,
+  invitingUser: string
+}
