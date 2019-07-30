@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import ChatWindow from '../ChatWindow/ChatWindow';
 import * as Props from './types';
 import { AppState } from '../../redux/store/configureStore';
@@ -7,6 +8,9 @@ import Socket from '../../socket/index';
 import { User } from '../../redux/store/types';
 import PrivRequestModal from '../PrivRequestModal/PrivRequestModal';
 import { PrivRequestModalInfo } from '../PrivRequestModal/types';
+import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
+import { addUserToRoom } from '../../redux/actions/socketIO/user';
+import { createNewRoom } from '../../redux/actions/socketIO/room';
 
 export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   constructor(props: Props.ChatAppProps) {
@@ -22,26 +26,41 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
 
   onPrivInvitation = (actualUser: User, newUser: User, roomName: string) => {
     console.log(`User ${actualUser.nickname} have ask me to join priv room - ${newUser.nickname} room: ${roomName}`);    
+    console.log('actualUser: ', actualUser);
+    console.log('newUser: ', newUser);
+    console.log('roomName: ', roomName);
     this.setState(state => {
       const newInvitation: PrivRequestModalInfo = {
         isModalOpen: true,
         invitingUser: actualUser.nickname,
-        roomName
+        myNickname: newUser.nickname,
+        roomName,
+        mySocketId: newUser.socketId
       };
       const invitations = [...state.invitations, newInvitation];
       return { invitations };
     });
   }
 
+  confirmPrivInvitation = (nickname: string, socketId: string, roomName: string) => {
+    const newUser: User = {
+      roomName,
+      socketId,
+      nickname,
+      isTyping: false
+    }
+    console.log('Confirm priv invitation: ', nickname, newUser, roomName);
+    this.props.createPrivateRoom(roomName);
+    Socket.joinRoom(newUser);
+    this.props.addUserToRoom(newUser);
+    // Socket.onGetYourUserToSocket(newUser);
+    // Socket.onNewUserInRoom(this.props.addUserToRoom);
+  }
+
   closeModal = (indexToClose: number) => {
     this.setState(state => {
-      const invitations = state.invitations.map((item, index) => {
-        if (index === indexToClose ) {
-          item.isModalOpen = false;
-          return item;
-        } else {
-          return item;
-        }
+      const invitations = state.invitations.filter((item, index) => {
+        return index !== indexToClose;         
       });
       return { invitations };
     });
@@ -56,8 +75,11 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
           <PrivRequestModal 
             key={index}
             isModalOpen={item.isModalOpen} 
-            onCloseModal={() => this.closeModal(index)}
+            onConfirmInvitation={this.confirmPrivInvitation}
+            onRejectInvitation={() => this.closeModal(index)}
+            myNickname={item.myNickname}
             invitingUser={item.invitingUser}
+            mySocketId={item.mySocketId}
             roomName={item.roomName}
           />
           ))
@@ -81,4 +103,13 @@ const mapStateToProps: (store: AppState, ownProps: Props.ChatAppProps) => Props.
     rooms: state.rooms
   });
 
-export default connect<Props.ChatAppStateProps, any, any, any>(mapStateToProps)(ChatApp);
+  const mapDispatchToProps: (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.ChatAppDispatchProps) =>
+    Props.ChatAppDispatchProps = 
+    (dispatch, ownProps) => ({
+      addUserToRoom: (newUser: User) => 
+        dispatch(addUserToRoom(newUser.roomName, newUser.socketId, newUser.nickname)),
+      createPrivateRoom: (roomName: string) => dispatch(createNewRoom(roomName, false, true)),
+    })
+
+export default connect<Props.ChatAppStateProps, Props.ChatAppDispatchProps, any, any>
+  (mapStateToProps, mapDispatchToProps)(ChatApp);

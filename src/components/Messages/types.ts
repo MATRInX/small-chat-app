@@ -1,6 +1,8 @@
 // MessagesStoreProps
 // MessagesDispatchProps
-export interface MessagesStandardProps { }
+export interface MessagesStandardProps { 
+  roomName: string
+}
 export interface MessagesState {
   messages: string[]
 };

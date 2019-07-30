@@ -19,15 +19,18 @@ export default class PrivRequestModal extends Component<Props.PrivRequestModalPr
   // }
 
   render() {
-    const { isModalOpen } = this.props;
+    const { isModalOpen, roomName, myNickname, mySocketId } = this.props;
     return <div>
       {/* <button onClick={this.openModal}>Trigger Modal</button> */}
       <Modal 
         isOpen={isModalOpen}
-        onRequestClose={this.props.onCloseModal}
+        onRequestClose={this.props.onRejectInvitation}
       >
         User {this.props.invitingUser} ask you to join priv room: {this.props.roomName}
-        <button onClick={this.props.onCloseModal}>Close modal</button>
+        <button 
+          onClick={() => this.props.onConfirmInvitation(myNickname, mySocketId, roomName)}
+        >Approve invitation and join room</button>
+        <button onClick={this.props.onRejectInvitation}>Reject invitation</button>
       </Modal>
     </div>
   }

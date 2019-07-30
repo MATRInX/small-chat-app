@@ -46,14 +46,15 @@ io.on('connection', function(socket) {
 
   socket.on(ROOM_MSG, (roomName, nickname, message) => {
     console.log('room msg: ' + roomName + ' from : ' + nickname+ ' |');//, io.sockets.adapter.rooms);
-    socket.to(roomName).emit(ROOM_MSG, nickname, message);
+    socket.to(roomName).emit(ROOM_MSG, roomName, nickname, message);
   });
 
   socket.on(JOIN_ROOM, (newUser) => {
     console.log('join room by: ', newUser);
     socket.join(newUser.roomName);
-    socket.to(newUser.roomName).emit(ROOM_MSG, newUser.nickname, 'A new user has joined the room: ');
-    socket.to(newUser.roomName).emit(GET_YOUR_USER_DATA, newUser.socketId);
+    console.log('3 msgs to room: ', newUser.roomName);
+    socket.to(newUser.roomName).emit(ROOM_MSG, newUser.roomName, newUser.nickname, 'A new user has joined the room: ');
+    socket.to(newUser.roomName).emit(GET_YOUR_USER_DATA, newUser.socketId, newUser.roomName);
     socket.to(newUser.roomName).emit(ADD_NEW_USER_TO_ROOM, newUser);
   });
 
@@ -63,10 +64,11 @@ io.on('connection', function(socket) {
   });
 
   socket.on(USER_IS_TYPINGS, (roomName, userNickname, isTypings) => {
-    socket.to(roomName).emit(USER_IS_TYPINGS, userNickname, isTypings);
+    socket.to(roomName).emit(USER_IS_TYPINGS, roomName, userNickname, isTypings);
   })
 
   socket.on(PRIV_INVITATION, (actualUser, newUser, roomName) => {
+    console.log(PRIV_INVITATION + ' : ', actualUser.nickname, newUser.nickname, roomName);
     socket.to(newUser.socketId).emit(PRIV_INVITATION, actualUser, newUser, roomName);
   })
 

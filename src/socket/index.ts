@@ -21,10 +21,12 @@ const joinRoom = (newUser: User): void => {
   socket.emit(SOCKET_EVENTS.joinRoom, newUser);
 };
 
-const onGetYourUserToSocket = (myUserData: User): void => {
+const onGetYourUserToSocket = (myUserData: User, myRoomName: string): void => {
   console.log('onGetYourUserToSocket: ', myUserData);
-  socket.on(SOCKET_EVENTS.getYourUserData, (destinationSocketId: string) => {
-    socket.emit(SOCKET_EVENTS.sendMyNickname, myUserData, destinationSocketId);
+  socket.on(SOCKET_EVENTS.getYourUserData, (destinationSocketId: string, roomName: string) => {
+    if (myUserData.nickname !== '' && myUserData.socketId !== undefined && myRoomName === roomName) {
+      socket.emit(SOCKET_EVENTS.sendMyNickname, myUserData, destinationSocketId);
+    }
   })
 };
 
@@ -37,8 +39,8 @@ const onNewUserInRoom = (fn: Function): void => {
 
 const onRoomMessage = (fn: Function): void => {
   console.log('onRoomMessage has been fired');
-  socket.on(SOCKET_EVENTS.roomMessage, (nickname: string, message: string) => {
-    fn(nickname, message);
+  socket.on(SOCKET_EVENTS.roomMessage, (roomName: string, nickname: string, message: string) => {
+    fn(roomName, nickname, message);
   })
 };
 
@@ -48,8 +50,8 @@ const emitUserTypings = (roomName: string, userNickname: string, isTyping: boole
 
 const onUserTypings = (fn: Function) => {
   console.log('onUserTypings');
-  socket.on(SOCKET_EVENTS.userIsTypings, (userNickname: string, isTyping: boolean) => {
-    fn(userNickname, isTyping);
+  socket.on(SOCKET_EVENTS.userIsTypings, (roomName: string, userNickname: string, isTyping: boolean) => {
+    fn(roomName, userNickname, isTyping);
   });
 };
 

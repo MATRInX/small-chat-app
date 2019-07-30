@@ -55,9 +55,12 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
     this.setState({ timeout })
   }
 
-  setTypingsState = (userNickname: string, isTypings: boolean) => {
-    this.setState({ typings: isTypings, typingsUsername: userNickname });
-    this.props.setUserTyping(this.props.roomName, userNickname, isTypings);
+  setTypingsState = (roomName: string, userNickname: string, isTypings: boolean) => {
+    if (roomName === this.props.roomName) {
+      this.setState({ typings: isTypings, typingsUsername: userNickname });
+      console.log('setUserTypings: ', this.props.roomName, userNickname, isTypings);
+      this.props.setUserTyping(this.props.roomName, userNickname, isTypings);
+    }
   }
 
   render() {
@@ -84,7 +87,7 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
 const mapStateToProps: (store: AppState, ownProps: InputBarProps) => InputBarStoreProps = 
   (store, ownProps) => ({
     actualUser: getActualUser(store.joinedUsers, socket.id),
-    typingsUsers: getAllTypingsUsers(store.joinedUsers, ownProps.nickname)
+    typingsUsers: getAllTypingsUsers(store.joinedUsers, ownProps.nickname, ownProps.roomName)
   });
 
 const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: InputBarDispatchProps) => ({

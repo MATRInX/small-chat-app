@@ -19,10 +19,12 @@ export default class Messages extends React.Component<MessagesStandardProps, Mes
     Socket.onRoomMessage(this.addMessage);
   }
 
-  addMessage = (nickname:string, message: string) => {
+  addMessage = (roomName: string, nickname:string, message: string) => {
     // const newMessages = this.state.messages;
-    this.state.messages.push(nickname+' '+message);
-    this.setState({ messages: this.state.messages });
+    if (roomName === this.props.roomName) {
+      // this.state.messages.push(nickname+' '+message);
+      this.setState({ messages: [...this.state.messages, nickname+' '+message] });
+    }
   }
 
   render() {

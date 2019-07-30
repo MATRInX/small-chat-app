@@ -12,6 +12,7 @@ import { AppState } from '../../redux/store/configureStore';
 import { User } from '../../redux/store/types';
 import OnlineUsers from '../OnlineUsers/OnlineUsers';
 import isUserLoggedInRoom from '../../redux/selectors/isUserLoggedInRoom';
+import getActualUserForRoom from '../../redux/selectors/getActualUserForRoom';
 
 
 export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.ChatWindowState> {
@@ -23,7 +24,28 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
     };
   }
 
-  // componentDidUpdate() {
+  componentDidMount() {
+    const actualUser: User = {
+      socketId: clientSocket.id,
+      roomName: this.props.roomName,
+      nickname: this.props.actualUser.nickname,
+      isTyping: false
+    }
+    Socket.onGetYourUserToSocket(actualUser, this.props.roomName);
+  }
+
+  componentDidUpdate(prevProps: Props.ChatWindowProps) {
+    const actualUser: User = {
+      socketId: clientSocket.id,
+      roomName: this.props.roomName,
+      nickname: this.props.actualUser.nickname,
+      isTyping: false
+    }
+    // console.log('actual user = ', this.props.actualUser);
+    // console.log('prevProps.actualUser ', prevProps.actualUser);
+    if (prevProps.actualUser.nickname !== actualUser.nickname) {
+      Socket.onGetYourUserToSocket(actualUser, this.props.roomName);
+    }
   //   // const { userRooms, roomName } = this.props;
   //   // let isUserInThisRoom: boolean = false;
   //   // userRooms.forEach(singleRoomName => {
@@ -31,7 +53,7 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
   //   //   if (singleRoomName === roomName) isUserInThisRoom = true;
   //   // });
   //   // this.setState({ isLoggedIn: isUserInThisRoom });
-  // }
+  }
 
   onChange = (event: FormEvent<EventTarget>): void => {
     const target = event.target as HTMLInputElement;
@@ -53,7 +75,7 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
       Socket.joinRoom(newUser);
       this.props.addUserToRoom(newUser);
       this.setState({ isLoggedIn: true });
-      Socket.onGetYourUserToSocket(newUser);
+      // Socket.onGetYourUserToSocket(newUser);
       Socket.onNewUserInRoom(this.props.addUserToRoom);
     }
   }
@@ -79,8 +101,8 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
             </div>
           ) : (
             <div>
-              <Messages />
-              <InputBar nickname={this.state.nickname} roomName={this.props.roomName}/>
+              <Messages roomName={this.props.roomName}/>
+              <InputBar nickname={this.props.actualUser.nickname} roomName={this.props.roomName}/>
               <OnlineUsers roomName={this.props.roomName}/>
             </div>
           )
@@ -92,7 +114,8 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
 
 const mapStateToProps: (store: AppState, ownProps: Props.ChatWindowProps) => Props.ChatWindowStoreProps = 
   (store, ownProps) => ({
-    isUserLoggedInRoom: isUserLoggedInRoom(store.joinedUsers, ownProps.roomName, clientSocket.id)
+    isUserLoggedInRoom: isUserLoggedInRoom(store.joinedUsers, ownProps.roomName, clientSocket.id),
+    actualUser: getActualUserForRoom(store.joinedUsers, ownProps.roomName, clientSocket.id)
   });
 
 const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.ChatWindowDispatchProps) => ({
