@@ -28,7 +28,6 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
 
   onSubmit = (event: FormEvent<EventTarget>): void => {
     event.preventDefault(); 
-    // socket.emit(SOCKET_EVENTS.chatMessage, this.state.message);
     Socket.sendMessage(this.props.roomName, this.props.nickname, this.state.message);
     this.setState({ message: '' });
   }
@@ -58,7 +57,6 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
   setTypingsState = (roomName: string, userNickname: string, isTypings: boolean) => {
     if (roomName === this.props.roomName) {
       this.setState({ typings: isTypings, typingsUsername: userNickname });
-      console.log('setUserTypings: ', this.props.roomName, userNickname, isTypings);
       this.props.setUserTyping(this.props.roomName, userNickname, isTypings);
     }
   }
