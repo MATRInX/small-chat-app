@@ -4,6 +4,7 @@ export interface PrivRequestModalStandardProps {
   isModalOpen: boolean,
   onRejectInvitation: () => void,
   onConfirmInvitation: (nickname: string, socketId: string, roomName: string) => void,
+  onCloseModal: () => void,
   invitingUser: string,
   myNickname: string,
   roomName: string,

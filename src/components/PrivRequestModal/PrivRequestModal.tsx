@@ -5,32 +5,28 @@ import * as Props from './types';
 export default class PrivRequestModal extends Component<Props.PrivRequestModalProps, Props.PrivRequestModalState> {
   constructor(props: Props.PrivRequestModalProps){
     super(props);
-    // this.state = {
-    //   isModalOpen: this.props.isModalOpen
-    // }
   }
 
-  // openModal = () => {
-  //   this.setState({ isModalOpen: true })
-  // }
+  confirmInvitation = () => {
+    const { roomName, myNickname, mySocketId } = this.props;
+    this.props.onConfirmInvitation(myNickname, mySocketId, roomName);
+    this.props.onCloseModal();
+  }
 
-  // closeModal = () => {
-  //   this.setState({ isModalOpen: false });
-  // }
+  rejectInvitation = () => {
+    this.props.onRejectInvitation();
+  }
 
   render() {
-    const { isModalOpen, roomName, myNickname, mySocketId } = this.props;
+    const { isModalOpen, onCloseModal, invitingUser, roomName } = this.props;
     return <div>
-      {/* <button onClick={this.openModal}>Trigger Modal</button> */}
       <Modal 
         isOpen={isModalOpen}
-        onRequestClose={this.props.onRejectInvitation}
+        onRequestClose={onCloseModal}
       >
-        User {this.props.invitingUser} ask you to join priv room: {this.props.roomName}
-        <button 
-          onClick={() => this.props.onConfirmInvitation(myNickname, mySocketId, roomName)}
-        >Approve invitation and join room</button>
-        <button onClick={this.props.onRejectInvitation}>Reject invitation</button>
+        User {invitingUser} ask you to join priv room: {roomName}
+        <button onClick={this.confirmInvitation}>Approve invitation and join room</button>
+        <button onClick={this.rejectInvitation}>Reject invitation</button>
       </Modal>
     </div>
   }

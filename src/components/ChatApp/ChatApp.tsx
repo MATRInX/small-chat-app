@@ -50,6 +50,10 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
     this.props.addUserToRoom(newUser);
   }
 
+  rejectPrivInvitation = () => {
+
+  }
+
   closeModal = (indexToClose: number) => {
     this.setState(state => {
       const invitations = state.invitations.filter((item, index) => {
@@ -69,7 +73,8 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
             key={index}
             isModalOpen={item.isModalOpen} 
             onConfirmInvitation={this.confirmPrivInvitation}
-            onRejectInvitation={() => this.closeModal(index)}
+            onRejectInvitation={this.rejectPrivInvitation}
+            onCloseModal={() => this.closeModal(index)}
             myNickname={item.myNickname}
             invitingUser={item.invitingUser}
             mySocketId={item.mySocketId}
