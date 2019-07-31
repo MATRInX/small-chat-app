@@ -20,6 +20,9 @@ const emitUserTypings = (roomName: string, typingsUser: string, isTyping: boolea
 const emitPrivInvitation = (invitingUser: User, newUser: User, roomName: string) => {
   socket.emit(SOCKET_EVENTS.sendPrivInvitation, invitingUser, newUser, roomName);
 };
+const emitPrivRejection = (invitingUser: string, myNickname: string, invitingUserSocketId: string) => {
+  socket.emit(SOCKET_EVENTS.getPrivRejection, invitingUser, myNickname, invitingUserSocketId);
+}
 // FROM SOCKET
 const onNewUserInRoom = (fn: Function): void => {
   socket.on(SOCKET_EVENTS.addNewUserToRoom, (newUser: User) => {
@@ -41,6 +44,11 @@ const onPrivInvitation = (fn: Function) => {
     fn(invitingUser, newUser, roomName);
   });
 };
+const onPrivRejection = (fn: Function) => {
+  socket.on(SOCKET_EVENTS.getPrivRejection, (invitingUser: User, rejectingUser: User, roomName: string) => {
+    fn(invitingUser, rejectingUser, roomName);
+  })
+}
 // FROM AND TO SOCKET
 const onGetYourUserToSocket = (myUserData: User, myRoomName: string): void => {
   socket.on(SOCKET_EVENTS.getYourUserData, (destinationSocketId: string, roomName: string) => {
@@ -57,13 +65,15 @@ export default {
     sendMessage,
     joinRoom,
     emitUserTypings,
-    emitPrivInvitation
+    emitPrivInvitation,
+    emitPrivRejection
   },
   from: {
     onNewUserInRoom,
     onRoomMessage,
     onUserTypings,
-    onPrivInvitation
+    onPrivInvitation,
+    onPrivRejection
   },
   fromAndTo: {
     onGetYourUserToSocket

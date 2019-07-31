@@ -22,6 +22,7 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
 
   componentDidMount() {
     Socket.from.onPrivInvitation(this.onPrivInvitation);
+    Socket.from.onPrivRejection(this.onPrivRejection);
   }
 
   onPrivInvitation = (actualUser: User, newUser: User, roomName: string) => {
@@ -29,6 +30,7 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
       const newInvitation: PrivRequestModalInfo = {
         isModalOpen: true,
         invitingUser: actualUser.nickname,
+        invitingUserSocketId: actualUser.socketId,
         myNickname: newUser.nickname,
         roomName,
         mySocketId: newUser.socketId
@@ -36,6 +38,11 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
       const invitations = [...state.invitations, newInvitation];
       return { invitations };
     });
+  }
+
+  onPrivRejection = (invitingUser: string, rejectingUser: string, invitingUserSocketId: string) => {
+    // Show modal with information about rejection
+    console.log(`User ${invitingUser} has reject your priv invitation.`);
   }
 
   confirmPrivInvitation = (nickname: string, socketId: string, roomName: string) => {
@@ -50,8 +57,9 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
     this.props.addUserToRoom(newUser);
   }
 
-  rejectPrivInvitation = () => {
-
+  rejectPrivInvitation = (invitingUser: string, myNickname: string, invitingUserSocketId: string) => {
+    console.log(`ChatApp = rejection priv inv`);
+    Socket.to.emitPrivRejection(invitingUser, myNickname, invitingUserSocketId);
   }
 
   closeModal = (indexToClose: number) => {
@@ -77,6 +85,7 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
             onCloseModal={() => this.closeModal(index)}
             myNickname={item.myNickname}
             invitingUser={item.invitingUser}
+            invitingUserSocketId={item.invitingUserSocketId}
             mySocketId={item.mySocketId}
             roomName={item.roomName}
           />

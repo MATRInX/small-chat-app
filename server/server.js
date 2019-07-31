@@ -28,6 +28,7 @@ io.on('connection', function(socket) {
   const ADD_NEW_USER_TO_ROOM = 'add new user to room';
   const USER_IS_TYPINGS = 'user is typings';
   const PRIV_INVITATION = 'send priv invitation';
+  const PRIV_REJECTION = 'get priv rejection';
   
   socket.on(USER_CONNECTED, (nickname) => {
     console.log('a user connected', nickname);
@@ -65,6 +66,10 @@ io.on('connection', function(socket) {
   socket.on(PRIV_INVITATION, (invitingUser, newUser, roomName) => {
     socket.to(newUser.socketId).emit(PRIV_INVITATION, invitingUser, newUser, roomName);
   });
+
+  socket.on(PRIV_REJECTION, (invitingUser, rejectingUser, roomName) => {
+    socket.to(roomName).emit(PRIV_REJECTION, invitingUser, rejectingUser, roomName);
+  })
 
   // socket.on(JOIN_ROOM, (roomName) => {
   //   console.log('join room: ', roomName);

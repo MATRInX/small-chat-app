@@ -8,5 +8,6 @@ export const SOCKET_EVENTS = {
   sendMyNickname: 'send my nickname',
   addNewUserToRoom: 'add new user to room',
   userIsTypings: 'user is typings',
-  sendPrivInvitation: 'send priv invitation'
+  sendPrivInvitation: 'send priv invitation',
+  getPrivRejection: 'get priv rejection'
 };
