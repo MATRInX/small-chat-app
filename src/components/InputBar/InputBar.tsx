@@ -23,12 +23,12 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
   }
 
   componentDidMount() {
-    Socket.onUserTypings(this.setTypingsState);
+    Socket.from.onUserTypings(this.setTypingsState);
   }
 
   onSubmit = (event: FormEvent<EventTarget>): void => {
     event.preventDefault(); 
-    Socket.sendMessage(this.props.roomName, this.props.nickname, this.state.message);
+    Socket.to.sendMessage(this.props.roomName, this.props.nickname, this.state.message);
     this.setState({ message: '' });
   }
 
@@ -44,11 +44,11 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
     clearTimeout(this.state.timeout);
     
     if (!actualUser.isTyping) {
-      Socket.emitUserTypings(roomName, nickname, true);
+      Socket.to.emitUserTypings(roomName, nickname, true);
       setUserTyping(roomName, nickname, true);
     }
     const timeout = setTimeout(() => {
-      Socket.emitUserTypings(roomName, nickname, false);
+      Socket.to.emitUserTypings(roomName, nickname, false);
       setUserTyping(roomName, nickname, false);
     }, 5000);    
     this.setState({ timeout })

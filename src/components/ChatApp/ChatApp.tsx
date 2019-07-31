@@ -21,14 +21,10 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   }
 
   componentDidMount() {
-    Socket.onPrivInvitation(this.onPrivInvitation);
+    Socket.from.onPrivInvitation(this.onPrivInvitation);
   }
 
   onPrivInvitation = (actualUser: User, newUser: User, roomName: string) => {
-    console.log(`User ${actualUser.nickname} have ask me to join priv room - ${newUser.nickname} room: ${roomName}`);    
-    console.log('actualUser: ', actualUser);
-    console.log('newUser: ', newUser);
-    console.log('roomName: ', roomName);
     this.setState(state => {
       const newInvitation: PrivRequestModalInfo = {
         isModalOpen: true,
@@ -49,12 +45,9 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
       nickname,
       isTyping: false
     }
-    console.log('Confirm priv invitation: ', nickname, newUser, roomName);
     this.props.createPrivateRoom(roomName);
-    Socket.joinRoom(newUser);
+    Socket.to.joinRoom(newUser);
     this.props.addUserToRoom(newUser);
-    // Socket.onGetYourUserToSocket(newUser);
-    // Socket.onNewUserInRoom(this.props.addUserToRoom);
   }
 
   closeModal = (indexToClose: number) => {

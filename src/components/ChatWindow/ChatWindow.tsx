@@ -31,7 +31,7 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
       nickname: this.props.actualUser.nickname,
       isTyping: false
     }
-    Socket.onGetYourUserToSocket(actualUser, this.props.roomName);
+    Socket.fromAndTo.onGetYourUserToSocket(actualUser, this.props.roomName);
   }
 
   componentDidUpdate(prevProps: Props.ChatWindowProps) {
@@ -44,7 +44,7 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
     // console.log('actual user = ', this.props.actualUser);
     // console.log('prevProps.actualUser ', prevProps.actualUser);
     if (prevProps.actualUser.nickname !== actualUser.nickname) {
-      Socket.onGetYourUserToSocket(actualUser, this.props.roomName);
+      Socket.fromAndTo.onGetYourUserToSocket(actualUser, this.props.roomName);
     }
   //   // const { userRooms, roomName } = this.props;
   //   // let isUserInThisRoom: boolean = false;
@@ -71,12 +71,12 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
         nickname: this.state.nickname,
         isTyping: false
       };
-      Socket.connectToSocket(userNickname);
-      Socket.joinRoom(newUser);
+      // Socket.to.connectToSocket(userNickname);
+      Socket.to.joinRoom(newUser);
       this.props.addUserToRoom(newUser);
-      this.setState({ isLoggedIn: true });
+      // this.setState({ isLoggedIn: true });
       // Socket.onGetYourUserToSocket(newUser);
-      Socket.onNewUserInRoom(this.props.addUserToRoom);
+      Socket.from.onNewUserInRoom(this.props.addUserToRoom);
     }
   }
 
