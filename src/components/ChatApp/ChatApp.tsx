@@ -7,16 +7,19 @@ import { AppState } from '../../redux/store/configureStore';
 import Socket from '../../socket/index';
 import { User } from '../../redux/store/types';
 import PrivRequestModal from '../PrivRequestModal/PrivRequestModal';
+import PrivRejectModal from '../PrivRejectInfoModal/PrivRejectInfoModal';
 import { PrivRequestModalInfo } from '../PrivRequestModal/types';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { addUserToRoom } from '../../redux/actions/socketIO/user';
 import { createNewRoom } from '../../redux/actions/socketIO/room';
+import { PrivRejectInfoModalStandardProps, PrivRejectModalInfo } from '../PrivRejectInfoModal/types';
 
 export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   constructor(props: Props.ChatAppProps) {
     super(props);
     this.state = {
-      invitations: []
+      invitations: [],
+      rejections: []
     }
   }
 
@@ -43,6 +46,14 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   onPrivRejection = (invitingUser: string, rejectingUser: string, invitingUserSocketId: string) => {
     // Show modal with information about rejection
     console.log(`User ${invitingUser} has reject your priv invitation.`);
+    this.setState(state => {
+      const newRejection: PrivRejectModalInfo = {
+        invitingUser,
+        isModalOpen: true
+      };
+      const rejections = [...state.rejections, newRejection];
+      return { rejections };
+    })
   }
 
   confirmPrivInvitation = (nickname: string, socketId: string, roomName: string) => {
@@ -62,18 +73,23 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
     Socket.to.emitPrivRejection(invitingUser, myNickname, invitingUserSocketId);
   }
 
-  closeModal = (indexToClose: number) => {
+  closePrivInvitationModal = (indexToClose: number) => {
     this.setState(state => {
-      const invitations = state.invitations.filter((item, index) => {
-        return index !== indexToClose;         
-      });
+      const invitations = state.invitations.filter((item, index) => index !== indexToClose);
       return { invitations };
     });
   }
 
+  closePrivRejectionModal = (indexToClose: number) => {
+    this.setState(state => {
+      const rejections = state.rejections.filter((item, index) => index !== indexToClose);
+      return { rejections };
+    })
+  }
+
   render(){
     const { rooms } = this.props;
-    const { invitations } = this.state;
+    const { invitations, rejections } = this.state;
     return <div>      
       {
         (invitations.length > 0 && invitations.map((item, index) => (
@@ -82,7 +98,7 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
             isModalOpen={item.isModalOpen} 
             onConfirmInvitation={this.confirmPrivInvitation}
             onRejectInvitation={this.rejectPrivInvitation}
-            onCloseModal={() => this.closeModal(index)}
+            onCloseModal={() => this.closePrivInvitationModal(index)}
             myNickname={item.myNickname}
             invitingUser={item.invitingUser}
             invitingUserSocketId={item.invitingUserSocketId}
@@ -91,6 +107,16 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
           />
           ))
         )
+      }
+      {
+        (rejections.length > 0 && rejections.map((item, index) => (
+          <PrivRejectModal 
+            key={index}
+            isModalOpen={item.isModalOpen}
+            onCloseModal={() => this.closePrivRejectionModal(index)}
+            invitingUser={item.invitingUser}
+          />  
+        )))
       }      
       {
         rooms.length > 0 ? (

@@ -1,5 +1,6 @@
 import { Room } from '../../redux/store/types';
 import { PrivRequestModalInfo } from  '../PrivRequestModal/types';
+import { PrivRejectModalInfo } from '../PrivRejectInfoModal/types';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { User } from '../../redux/store/types';
 
@@ -13,7 +14,8 @@ export interface ChatAppDispatchProps {
 }
 // ChatAppStandardProps
 export interface ChatAppState {
-  invitations: PrivRequestModalInfo[]
+  invitations: PrivRequestModalInfo[],
+  rejections: PrivRejectModalInfo[]
 }
 
 export type ChatAppProps = ChatAppStateProps & ChatAppDispatchProps;

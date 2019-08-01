@@ -1,11 +1,14 @@
 // PrivRejectInfoModalStateProps
 // PrivRejectInfoModalDispatchProps
 
-export interface PrivRejectInfoModalStandardProps {
+export interface PrivRejectModalInfo {
   isModalOpen: boolean,
-  onCloseModal: () => void,
   invitingUser: string
 };
+
+export interface PrivRejectInfoModalStandardProps extends PrivRejectModalInfo {
+  onCloseModal: () => void
+}
 
 // PrivRejectInfoModalState
 
