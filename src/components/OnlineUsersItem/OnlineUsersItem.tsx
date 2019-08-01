@@ -14,7 +14,6 @@ import Socket from '../../socket/index';
 export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
   const { user, createPrivateRoom, actualUser , addUserToPrivateRoom } = props;
   const onClick = () => {    
-    console.log('send invitation to ', user);
     const roomName: string = `private-${user.nickname}`;
     const newUser:User = {
       ...actualUser,

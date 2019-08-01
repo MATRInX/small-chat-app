@@ -1,4 +1,3 @@
-import { User } from '../../redux/store/types';
 // PrivRequestModalStateProps
 // PrivRequestModalDispatchProps
 export interface PrivRequestModalStandardProps {

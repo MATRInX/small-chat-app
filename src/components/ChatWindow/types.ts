@@ -11,8 +11,7 @@ export interface ChatWindowStandardProps {
   roomName: string
 };
 export interface ChatWindowState {
-  nickname: string,
-  isLoggedIn: boolean
+  nickname: string
 };
 
 export type ChatWindowProps =
