@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
 io.on('connection', function(socket) {
   const USER_CONNECTED = 'connect user';
   const USER_DISCONNECTED = 'disconnect';
+  const USER_DISCONNECTED_FROM_ROOM = 'disconnect of user';
   const CHAT_MSG = 'chat message';
   const JOIN_ROOM = 'join room';
   const ROOM_MSG = 'room message';
@@ -29,15 +30,24 @@ io.on('connection', function(socket) {
   const USER_IS_TYPINGS = 'user is typings';
   const PRIV_INVITATION = 'send priv invitation';
   const PRIV_REJECTION = 'get priv rejection';
+  const DELETE_USER_FROM_ROOM = 'delete user from room';
+  const DELETE_USER = 'delete user';
   
   socket.on(USER_CONNECTED, (nickname) => {
     console.log('a user connected', nickname);
     socket.broadcast.emit(CHAT_MSG, 'A new user connect to this room...', nickname);
-  })
+  });
 
   socket.on(USER_DISCONNECTED, () => {
-    console.log('user disconnected');
-    io.emit(CHAT_MSG, 'Some user have left this chat room...');
+    console.log('user have been desconected: ', socket.id);
+    socket.broadcast.emit(DELETE_USER, socket.id);
+  });
+
+  socket.on(USER_DISCONNECTED_FROM_ROOM, (roomName, socketId) => {    
+    console.log('user disconnected from room: ', roomName, socket.id, socketId);
+    socket.to(roomName).emit(DELETE_USER_FROM_ROOM, roomName, socketId);
+    socket.leave(roomName);
+    //io.to(roomName).emit(ROOM_MSG, 'Some user have left this chat room...');
   });
 
   socket.on(CHAT_MSG, (nickname, message) => {

@@ -5,8 +5,8 @@ import { User } from '../redux/store/types';
 const connectToSocket = (nickname: string) => {
   socket.emit(SOCKET_EVENTS.connect, nickname);
 };
-const disconnectFromSocket = () => {
-  socket.emit(SOCKET_EVENTS.disconnect);
+const disconnectFromRoom = (roomName: string, socketId: string) => {
+  socket.emit(SOCKET_EVENTS.disconnectUserFromRoom, roomName, socketId);
 };
 const sendMessage = (roomName: string, nickname: string, message:string): void => {
   socket.emit(SOCKET_EVENTS.roomMessage, roomName, nickname, message);
@@ -24,6 +24,12 @@ const emitPrivRejection = (invitingUser: string, myNickname: string, invitingUse
   socket.emit(SOCKET_EVENTS.getPrivRejection, invitingUser, myNickname, invitingUserSocketId);
 }
 // FROM SOCKET
+const disconnectUser = (fn: Function):void => {
+  socket.on(SOCKET_EVENTS.disconnect, (socketId: string) => {
+    console.log('some user have been disconnected: ', socketId);
+    fn(socketId);
+  })
+};
 const onNewUserInRoom = (fn: Function): void => {
   socket.on(SOCKET_EVENTS.addNewUserToRoom, (newUser: User) => {
     fn(newUser);
@@ -49,6 +55,11 @@ const onPrivRejection = (fn: Function) => {
     fn(invitingUser, rejectingUser, roomName);
   })
 }
+const onDeleteUserFromRoom = (fn: Function) => {
+  socket.on(SOCKET_EVENTS.deleteUserFromRoom, (roomName: string, socketId: string) => {
+    fn(roomName, socketId);
+  })
+};
 // FROM AND TO SOCKET
 const onGetYourUserToSocket = (myUserData: User, myRoomName: string): void => {
   socket.on(SOCKET_EVENTS.getYourUserData, (destinationSocketId: string, roomName: string) => {
@@ -61,7 +72,7 @@ const onGetYourUserToSocket = (myUserData: User, myRoomName: string): void => {
 export default { 
   to: {
     connectToSocket,
-    disconnectFromSocket,
+    disconnectFromRoom,
     sendMessage,
     joinRoom,
     emitUserTypings,
@@ -73,7 +84,9 @@ export default {
     onRoomMessage,
     onUserTypings,
     onPrivInvitation,
-    onPrivRejection
+    onPrivRejection,
+    disconnectUser,
+    onDeleteUserFromRoom
   },
   fromAndTo: {
     onGetYourUserToSocket

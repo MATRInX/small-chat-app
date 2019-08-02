@@ -31,6 +31,15 @@ export const deleteUserFromRoom: (roomName: string, socketId: string) => SocketI
   }
 });
 
+// delete user from all rooms
+export const deleteUser: (socketId: string) => SocketIOActionTypes = 
+(socketId) => ({
+  type: SocketIOActionTypesEnum.DELETE_USER,
+  payload: {
+    socketId
+  }
+});
+
 // set user typing
 export const setUserTyping: (roomName: string, nickname: string, isTyping: boolean) => SocketIOActionTypes =
 (roomName, nickname, isTyping) => ({

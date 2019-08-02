@@ -5,7 +5,7 @@ import InputBar from '../InputBar/InputBar';
 import Socket from '../../socket/index';
 import { socket as clientSocket } from '../../index';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
-import { addUserToRoom } from '../../redux/actions/socketIO/user';
+import { addUserToRoom, deleteUserFromRoom, deleteUser } from '../../redux/actions/socketIO/user';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/store/configureStore';
@@ -31,6 +31,12 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
       isTyping: false
     }
     Socket.fromAndTo.onGetYourUserToSocket(actualUser, this.props.roomName);
+    Socket.from.onDeleteUserFromRoom(this.onDeleteUserFromRoom);
+    Socket.from.disconnectUser(this.onDeleteUser)
+  }
+  
+  disconn = () => {
+    Socket.to.disconnectFromRoom(this.props.roomName, clientSocket.id);
   }
 
   componentDidUpdate(prevProps: Props.ChatWindowProps) {
@@ -67,6 +73,19 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
     }
   }
 
+  onDeleteUserFromRoom = (roomName: string, socketId: string) => {
+    this.props.deleteUserFromRoom(roomName, socketId);
+  }
+
+  onDeleteUser = (socketId: string) => {
+    this.props.deleteUser(socketId);
+  }
+
+  onRoomLeave = () => {
+    Socket.to.disconnectFromRoom(this.props.roomName, clientSocket.id)
+    this.props.deleteUserFromRoom(this.props.roomName, clientSocket.id);
+  }
+
   render() {
     
 
@@ -88,6 +107,7 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
             </div>
           ) : (
             <div>
+              <button onClick={this.onRoomLeave}>Delete</button>
               <Messages roomName={this.props.roomName}/>
               <InputBar nickname={this.props.actualUser.nickname} roomName={this.props.roomName}/>
               <OnlineUsers roomName={this.props.roomName}/>
@@ -107,7 +127,11 @@ const mapStateToProps: (store: AppState, ownProps: Props.ChatWindowProps) => Pro
 
 const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.ChatWindowDispatchProps) => ({
   addUserToRoom: (newUser: User) => 
-                  dispatch(addUserToRoom(newUser.roomName, newUser.socketId, newUser.nickname))
+    dispatch(addUserToRoom(newUser.roomName, newUser.socketId, newUser.nickname)),
+  deleteUserFromRoom: (roomName: string, socketId: string) =>
+    dispatch(deleteUserFromRoom(roomName, socketId)),
+  deleteUser: (socketId: string) =>
+    dispatch(deleteUser(socketId))
 });
 
 export default connect<Props.ChatWindowStoreProps, Props.ChatWindowDispatchProps, any, any>

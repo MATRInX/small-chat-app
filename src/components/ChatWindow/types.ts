@@ -5,7 +5,9 @@ export interface ChatWindowStoreProps {
   actualUser: User  
 }
 export interface ChatWindowDispatchProps {
-  addUserToRoom: (newUser: User) => SocketIOActionTypes
+  addUserToRoom: (newUser: User) => SocketIOActionTypes,
+  deleteUserFromRoom: (roomName: string, socketId: string) => SocketIOActionTypes,
+  deleteUser: (socketId: string) => SocketIOActionTypes
 }
 export interface ChatWindowStandardProps {
   roomName: string

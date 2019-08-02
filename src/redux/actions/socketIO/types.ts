@@ -7,6 +7,7 @@ export enum SocketIOActionTypesEnum {
   SEND_ROOM_BROADCAST = 'SEND_ROOM_BROADCAST',
   SEND_MSG_TO_USER = 'SEND_MSG_TO_USER',
   ADD_USER_TO_ROOM = 'ADD_USER_TO_ROOM',
+  DELETE_USER = 'DELETE_USER',
   DELETE_USER_FROM_ROOM = 'DELETE_USER_FROM_ROOM',
   SET_USER_DATA = 'SET_USER_DATA',
   SET_USER_TYPING = 'SET_USER_TYPING'
@@ -22,6 +23,10 @@ type AddUserToRoomAction = Action<{
 
 type DeleteUserFromRoomAction = Action<{
   roomName: string,
+  socketId: string
+}>;
+
+type DeleteUserAction = Action<{
   socketId: string
 }>;
 
@@ -60,6 +65,7 @@ type SetUserTypings = Action<{
 export type SocketIOActionTypes = 
   SocketIOInitAction |
   AddUserToRoomAction |
+  DeleteUserAction |
   DeleteUserFromRoomAction |
   CreateNewRoomAction |
   DeleteRoomAction |

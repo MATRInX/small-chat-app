@@ -25,6 +25,13 @@ export const userReducer: Reducer<OnlineUserState> =
              }
           return true;
         });
+      case SocketIOActionTypesEnum.DELETE_USER:
+        return state.filter((user) => {
+          if (user.socketId === action.payload.socketId) {
+               return false;
+             }
+          return true;
+        });
       case SocketIOActionTypesEnum.SET_USER_TYPING:
         return state.map(user => {
             return {...user, 
