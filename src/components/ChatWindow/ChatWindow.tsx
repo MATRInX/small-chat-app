@@ -6,6 +6,7 @@ import Socket from '../../socket/index';
 import { socket as clientSocket } from '../../index';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { addUserToRoom, deleteUserFromRoom, deleteUser } from '../../redux/actions/socketIO/user';
+import { deleteRoom } from '../../redux/actions/socketIO/room';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { AppState } from '../../redux/store/configureStore';
@@ -13,6 +14,7 @@ import { User } from '../../redux/store/types';
 import OnlineUsers from '../OnlineUsers/OnlineUsers';
 import isUserLoggedInRoom from '../../redux/selectors/isUserLoggedInRoom';
 import getActualUserForRoom from '../../redux/selectors/getActualUserForRoom';
+import getUsersForRoom from '../../redux/selectors/getUsersInRoom';
 
 
 export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.ChatWindowState> {
@@ -70,6 +72,7 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
       Socket.to.joinRoom(newUser);
       this.props.addUserToRoom(newUser);
       Socket.from.onNewUserInRoom(this.props.addUserToRoom);
+      // this.setState({ nickname: '' });
     }
   }
 
@@ -84,6 +87,11 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
   onRoomLeave = () => {
     Socket.to.disconnectFromRoom(this.props.roomName, clientSocket.id)
     this.props.deleteUserFromRoom(this.props.roomName, clientSocket.id);
+    this.props.deleteRoom(this.props.roomName, this.props.usersInRoom);
+  }
+
+  onRoomClose = () => {
+    this.props.deleteRoom(this.props.roomName, this.props.usersInRoom);
   }
 
   render() {
@@ -107,7 +115,8 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
             </div>
           ) : (
             <div>
-              <button onClick={this.onRoomLeave}>Delete</button>
+              <button onClick={this.onRoomLeave}>Leave room</button>
+              <button onClick={this.onRoomClose}>Close Room</button>
               <Messages roomName={this.props.roomName}/>
               <InputBar nickname={this.props.actualUser.nickname} roomName={this.props.roomName}/>
               <OnlineUsers roomName={this.props.roomName}/>
@@ -122,7 +131,8 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
 const mapStateToProps: (store: AppState, ownProps: Props.ChatWindowProps) => Props.ChatWindowStoreProps = 
   (store, ownProps) => ({
     isUserLoggedInRoom: isUserLoggedInRoom(store.joinedUsers, ownProps.roomName, clientSocket.id),
-    actualUser: getActualUserForRoom(store.joinedUsers, ownProps.roomName, clientSocket.id)
+    actualUser: getActualUserForRoom(store.joinedUsers, ownProps.roomName, clientSocket.id),
+    usersInRoom: getUsersForRoom(store.joinedUsers, ownProps.roomName)
   });
 
 const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.ChatWindowDispatchProps) => ({
@@ -131,7 +141,9 @@ const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: P
   deleteUserFromRoom: (roomName: string, socketId: string) =>
     dispatch(deleteUserFromRoom(roomName, socketId)),
   deleteUser: (socketId: string) =>
-    dispatch(deleteUser(socketId))
+    dispatch(deleteUser(socketId)),
+  deleteRoom: (roomName: string, usersInRoom: User[]) =>
+    dispatch(deleteRoom(roomName, usersInRoom))
 });
 
 export default connect<Props.ChatWindowStoreProps, Props.ChatWindowDispatchProps, any, any>

@@ -1,4 +1,5 @@
 import { SocketIOActionTypesEnum, SocketIOActionTypes } from './types';
+import { User } from '../../store/types';
 
 // Init action
 export const socketInit: () => SocketIOActionTypes = () => ({
@@ -15,11 +16,12 @@ export const createNewRoom: (roomName: string, isFixed: boolean, isPrivate: bool
   }
 });
 
-export const deleteRoom: (roomName: string) => SocketIOActionTypes = 
-(roomName) => ({
+export const deleteRoom: (roomName: string, usersInRoom: User[]) => SocketIOActionTypes = 
+(roomName, usersInRoom) => ({
   type: SocketIOActionTypesEnum.DELETE_ROOM,
   payload: {
-    roomName
+    roomName,
+    usersInRoom
   }
 });
 

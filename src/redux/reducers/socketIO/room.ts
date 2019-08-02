@@ -18,7 +18,9 @@ export const roomReducer: Reducer<RoomState> =
         ]
       case SocketIOActionTypesEnum.DELETE_ROOM:
         return state.filter((room) => {
-          if (room.roomName === action.payload.roomName) {
+          if (action.payload.usersInRoom.length === 1 && 
+              !room.isFixed && 
+              room.roomName === action.payload.roomName) {
             return false;
           }
           return true;

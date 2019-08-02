@@ -69,7 +69,7 @@ const onGetYourUserToSocket = (myUserData: User, myRoomName: string): void => {
   })
 };
 
-export default { 
+export default {
   to: {
     connectToSocket,
     disconnectFromRoom,

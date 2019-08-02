@@ -1,4 +1,5 @@
 import { Action } from '../../store/types';
+import { User } from '../../store/types';
 
 export enum SocketIOActionTypesEnum {
   INIT = '@@INIT',
@@ -37,7 +38,8 @@ type CreateNewRoomAction = Action<{
 }>;
 
 type DeleteRoomAction = Action<{
-  roomName: string
+  roomName: string,
+  usersInRoom: User[]
 }>;
 
 type SetUserTypings = Action<{
