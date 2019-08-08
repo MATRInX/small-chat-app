@@ -4,7 +4,7 @@ import { Reducer } from 'redux';
 
 const roomDefaultState: RoomState = [];
 
-export const roomReducer: Reducer<RoomState> = 
+export const roomReducer: Reducer<RoomState> =
   (state = roomDefaultState, action) => {
     switch(action.type) {
       case SocketIOActionTypesEnum.CREATE_NEW_ROOM:
@@ -18,8 +18,7 @@ export const roomReducer: Reducer<RoomState> =
         ]
       case SocketIOActionTypesEnum.DELETE_ROOM:
         return state.filter((room) => {
-          if (action.payload.usersInRoom.length === 1 && 
-              !room.isFixed && 
+          if (!room.isFixed &&
               room.roomName === action.payload.roomName) {
             return false;
           }
