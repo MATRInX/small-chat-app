@@ -2,7 +2,12 @@
 // PrivRequestModalDispatchProps
 export interface PrivRequestModalStandardProps {
   isModalOpen: boolean,
-  onRejectInvitation: (invitingUser: string, rejectingUser: string, invitingUserSocketId: string) => void,
+  onRejectInvitation: (
+    invitingUser: string,
+    rejectingUser: string,
+    invitingUserSocketId: string,
+    roomName: string
+  ) => void,
   onConfirmInvitation: (nickname: string, socketId: string, roomName: string) => void,
   onCloseModal: () => void,
   invitingUser: string,

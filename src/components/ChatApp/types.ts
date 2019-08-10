@@ -10,7 +10,9 @@ export interface ChatAppStateProps {
 
 export interface ChatAppDispatchProps {
   addUserToRoom: (newUser: User) => SocketIOActionTypes,
-  createPrivateRoom: (roomName: string) => SocketIOActionTypes
+  createPrivateRoom: (roomName: string) => SocketIOActionTypes,
+  deleteUserFromRoom: (roomName: string, socketId: string) => SocketIOActionTypes,
+  deleteRoom: (roomName: string) => SocketIOActionTypes
 }
 // ChatAppStandardProps
 export interface ChatAppState {

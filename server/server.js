@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 app.use(express.static(publicPath));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));  
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 io.on('connection', function(socket) {
@@ -32,7 +32,7 @@ io.on('connection', function(socket) {
   const PRIV_REJECTION = 'get priv rejection';
   const DELETE_USER_FROM_ROOM = 'delete user from room';
   const DELETE_USER = 'delete user';
-  
+
   socket.on(USER_CONNECTED, (nickname) => {
     console.log('a user connected', nickname);
     socket.broadcast.emit(CHAT_MSG, 'A new user connect to this room...', nickname);
@@ -43,8 +43,7 @@ io.on('connection', function(socket) {
     socket.broadcast.emit(DELETE_USER, socket.id);
   });
 
-  socket.on(USER_DISCONNECTED_FROM_ROOM, (roomName, socketId) => {    
-    console.log('user disconnected from room: ', roomName, socket.id, socketId);
+  socket.on(USER_DISCONNECTED_FROM_ROOM, (roomName, socketId) => {
     socket.to(roomName).emit(DELETE_USER_FROM_ROOM, roomName, socketId);
     socket.leave(roomName);
     //io.to(roomName).emit(ROOM_MSG, 'Some user have left this chat room...');
@@ -77,8 +76,8 @@ io.on('connection', function(socket) {
     socket.to(newUser.socketId).emit(PRIV_INVITATION, invitingUser, newUser, roomName);
   });
 
-  socket.on(PRIV_REJECTION, (invitingUser, rejectingUser, roomName) => {
-    socket.to(roomName).emit(PRIV_REJECTION, invitingUser, rejectingUser, roomName);
+  socket.on(PRIV_REJECTION, (invitingUser, rejectingUser, socketId, roomName) => {
+    socket.to(socketId).emit(PRIV_REJECTION, invitingUser, rejectingUser, socketId, roomName);
   })
 
   // socket.on(JOIN_ROOM, (roomName) => {

@@ -6,7 +6,7 @@ export const socketInit: () => SocketIOActionTypes = () => ({
   type: SocketIOActionTypesEnum.INIT
 });
 
-export const createNewRoom: (roomName: string, isFixed: boolean, isPrivate: boolean) => SocketIOActionTypes = 
+export const createNewRoom: (roomName: string, isFixed: boolean, isPrivate: boolean) => SocketIOActionTypes =
 (roomName, isFixed, isPrivate) => ({
   type: SocketIOActionTypesEnum.CREATE_NEW_ROOM,
   payload: {
@@ -16,17 +16,16 @@ export const createNewRoom: (roomName: string, isFixed: boolean, isPrivate: bool
   }
 });
 
-export const deleteRoom: (roomName: string, usersInRoom: User[]) => SocketIOActionTypes = 
-(roomName, usersInRoom) => ({
+export const deleteRoom: (roomName: string) => SocketIOActionTypes =
+(roomName) => ({
   type: SocketIOActionTypesEnum.DELETE_ROOM,
   payload: {
-    roomName,
-    usersInRoom
+    roomName
   }
 });
 
 // // send room broadcast
-// export const sendRoomBroadcast: (roomName: string, message: string) => SocketIOActionTypes = 
+// export const sendRoomBroadcast: (roomName: string, message: string) => SocketIOActionTypes =
 //   (roomName, message) => ({
 //     type: SocketIOActionTypesEnum.SEND_ROOM_BROADCAST,
 //     payload: {
@@ -36,7 +35,7 @@ export const deleteRoom: (roomName: string, usersInRoom: User[]) => SocketIOActi
 //   });
 
 // // send msg to user
-// export const sendMsgToUser: (roomName: string, userId: string, message: string) => SocketIOActionTypes = 
+// export const sendMsgToUser: (roomName: string, userId: string, message: string) => SocketIOActionTypes =
 //   (roomName, userId, message) => ({
 //     type: SocketIOActionTypesEnum.SEND_MSG_TO_USER,
 //     payload: {

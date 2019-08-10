@@ -87,11 +87,7 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
   onRoomLeave = () => {
     Socket.to.disconnectFromRoom(this.props.roomName, clientSocket.id)
     this.props.deleteUserFromRoom(this.props.roomName, clientSocket.id);
-    this.props.deleteRoom(this.props.roomName, this.props.usersInRoom);
-  }
-
-  onRoomClose = () => {
-    this.props.deleteRoom(this.props.roomName, this.props.usersInRoom);
+    this.props.deleteRoom(this.props.roomName);
   }
 
   render() {
@@ -140,8 +136,8 @@ const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: P
     dispatch(deleteUserFromRoom(roomName, socketId)),
   deleteUser: (socketId: string) =>
     dispatch(deleteUser(socketId)),
-  deleteRoom: (roomName: string, usersInRoom: User[]) =>
-    dispatch(deleteRoom(roomName, usersInRoom))
+  deleteRoom: (roomName: string) =>
+    dispatch(deleteRoom(roomName))
 });
 
 export default connect<Props.ChatWindowStoreProps, Props.ChatWindowDispatchProps, any, any>

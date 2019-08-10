@@ -14,16 +14,15 @@ export default class PrivRequestModal extends Component<Props.PrivRequestModalPr
   }
 
   rejectInvitation = () => {
-    const { invitingUser, myNickname, invitingUserSocketId } = this.props;
-    this.props.onRejectInvitation(invitingUser, myNickname, invitingUserSocketId);
-    console.log(`rejection from ${myNickname}`);
+    const { invitingUser, myNickname, invitingUserSocketId, roomName } = this.props;
+    this.props.onRejectInvitation(invitingUser, myNickname, invitingUserSocketId, roomName);
     this.props.onCloseModal();
   }
 
   render() {
     const { isModalOpen, onCloseModal, invitingUser, roomName } = this.props;
     return <div>
-      <Modal 
+      <Modal
         isOpen={isModalOpen}
         onRequestClose={onCloseModal}
       >

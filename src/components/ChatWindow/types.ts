@@ -3,13 +3,13 @@ import { User } from '../../redux/store/types';
 export interface ChatWindowStoreProps {
   isUserLoggedInRoom: boolean,
   actualUser: User,
-  usersInRoom: User[]  
+  usersInRoom: User[]
 }
 export interface ChatWindowDispatchProps {
   addUserToRoom: (newUser: User) => SocketIOActionTypes,
   deleteUserFromRoom: (roomName: string, socketId: string) => SocketIOActionTypes,
   deleteUser: (socketId: string) => SocketIOActionTypes,
-  deleteRoom: (roomName: string, usersInRoom: User[]) => SocketIOActionTypes
+  deleteRoom: (roomName: string) => SocketIOActionTypes
 }
 export interface ChatWindowStandardProps {
   roomName: string

@@ -38,8 +38,7 @@ type CreateNewRoomAction = Action<{
 }>;
 
 type DeleteRoomAction = Action<{
-  roomName: string,
-  usersInRoom: User[]
+  roomName: string
 }>;
 
 type SetUserTypings = Action<{
@@ -64,7 +63,7 @@ type SetUserTypings = Action<{
 //   userNickname: string
 // }>
 
-export type SocketIOActionTypes = 
+export type SocketIOActionTypes =
   SocketIOInitAction |
   AddUserToRoomAction |
   DeleteUserAction |

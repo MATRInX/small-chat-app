@@ -20,13 +20,15 @@ const emitUserTypings = (roomName: string, typingsUser: string, isTyping: boolea
 const emitPrivInvitation = (invitingUser: User, newUser: User, roomName: string) => {
   socket.emit(SOCKET_EVENTS.sendPrivInvitation, invitingUser, newUser, roomName);
 };
-const emitPrivRejection = (invitingUser: string, myNickname: string, invitingUserSocketId: string) => {
-  socket.emit(SOCKET_EVENTS.getPrivRejection, invitingUser, myNickname, invitingUserSocketId);
+const emitPrivRejection = (invitingUser: string,
+  myNickname: string,
+  invitingUserSocketId: string,
+  roomName: string) => {
+  socket.emit(SOCKET_EVENTS.getPrivRejection, invitingUser, myNickname, invitingUserSocketId, roomName);
 }
 // FROM SOCKET
 const disconnectUser = (fn: Function):void => {
   socket.on(SOCKET_EVENTS.disconnect, (socketId: string) => {
-    console.log('some user have been disconnected: ', socketId);
     fn(socketId);
   })
 };
@@ -40,19 +42,28 @@ const onRoomMessage = (fn: Function): void => {
     fn(roomName, nickname, message);
   })
 };
+const offRoomMessage = (): void => {
+  socket.off(SOCKET_EVENTS.roomMessage);
+}
 const onUserTypings = (fn: Function) => {
   socket.on(SOCKET_EVENTS.userIsTypings, (roomName: string, typingsUser: string, isTyping: boolean) => {
     fn(roomName, typingsUser, isTyping);
   });
 };
+const offUserTypings = () => {
+  socket.off(SOCKET_EVENTS.userIsTypings);
+}
 const onPrivInvitation = (fn: Function) => {
   socket.on(SOCKET_EVENTS.sendPrivInvitation, (invitingUser: User, newUser: User, roomName: string) => {
     fn(invitingUser, newUser, roomName);
   });
 };
 const onPrivRejection = (fn: Function) => {
-  socket.on(SOCKET_EVENTS.getPrivRejection, (invitingUser: User, rejectingUser: User, roomName: string) => {
-    fn(invitingUser, rejectingUser, roomName);
+  socket.on(SOCKET_EVENTS.getPrivRejection, (invitingUser: User,
+    rejectingUser: User,
+    invitingUserSocketId: string,
+    roomName: string) => {
+    fn(invitingUser, rejectingUser, invitingUserSocketId, roomName);
   })
 }
 const onDeleteUserFromRoom = (fn: Function) => {
@@ -82,7 +93,9 @@ export default {
   from: {
     onNewUserInRoom,
     onRoomMessage,
+    offRoomMessage,
     onUserTypings,
+    offUserTypings,
     onPrivInvitation,
     onPrivRejection,
     disconnectUser,

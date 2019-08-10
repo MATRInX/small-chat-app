@@ -10,14 +10,22 @@ export default class Messages extends React.Component<MessagesStandardProps, Mes
     };
   }
 
+  __Unounted = false;
+
   componentDidMount() {
     Socket.from.onRoomMessage(this.addMessage);
   }
 
   addMessage = (roomName: string, nickname:string, message: string) => {
     if (roomName === this.props.roomName) {
-      this.setState({ messages: [...this.state.messages, nickname+' '+message] });
+      if (!this.__Unounted) {
+        this.setState({ messages: [...this.state.messages, nickname+' '+message] });
+      }
     }
+  }
+
+  componentWillUnmount() {
+    this.__Unounted = true;
   }
 
   render() {

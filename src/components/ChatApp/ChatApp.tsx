@@ -10,8 +10,8 @@ import PrivRequestModal from '../PrivRequestModal/PrivRequestModal';
 import PrivRejectModal from '../PrivRejectInfoModal/PrivRejectInfoModal';
 import { PrivRequestModalInfo } from '../PrivRequestModal/types';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
-import { addUserToRoom } from '../../redux/actions/socketIO/user';
-import { createNewRoom } from '../../redux/actions/socketIO/room';
+import { addUserToRoom, deleteUserFromRoom } from '../../redux/actions/socketIO/user';
+import { createNewRoom, deleteRoom } from '../../redux/actions/socketIO/room';
 import { PrivRejectInfoModalStandardProps, PrivRejectModalInfo } from '../PrivRejectInfoModal/types';
 
 export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
@@ -43,9 +43,11 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
     });
   }
 
-  onPrivRejection = (invitingUser: string, rejectingUser: string, invitingUserSocketId: string) => {
+  onPrivRejection = (invitingUser: string,
+    rejectingUser: string,
+    invitingUserSocketId: string,
+    roomName: string) => {
     // Show modal with information about rejection
-    console.log(`User ${invitingUser} has reject your priv invitation.`);
     this.setState(state => {
       const newRejection: PrivRejectModalInfo = {
         invitingUser,
@@ -54,6 +56,9 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
       const rejections = [...state.rejections, newRejection];
       return { rejections };
     })
+    Socket.to.disconnectFromRoom(roomName, invitingUserSocketId);
+    this.props.deleteUserFromRoom(roomName, invitingUserSocketId);
+    this.props.deleteRoom(roomName);
   }
 
   confirmPrivInvitation = (nickname: string, socketId: string, roomName: string) => {
@@ -68,9 +73,11 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
     this.props.addUserToRoom(newUser);
   }
 
-  rejectPrivInvitation = (invitingUser: string, myNickname: string, invitingUserSocketId: string) => {
-    console.log(`ChatApp = rejection priv inv`);
-    Socket.to.emitPrivRejection(invitingUser, myNickname, invitingUserSocketId);
+  rejectPrivInvitation = (invitingUser: string,
+    myNickname: string,
+    invitingUserSocketId: string,
+    roomName: string) => {
+    Socket.to.emitPrivRejection(invitingUser, myNickname, invitingUserSocketId, roomName);
   }
 
   closePrivInvitationModal = (indexToClose: number) => {
@@ -90,12 +97,12 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   render(){
     const { rooms } = this.props;
     const { invitations, rejections } = this.state;
-    return <div>      
+    return <div>
       {
         (invitations.length > 0 && invitations.map((item, index) => (
-          <PrivRequestModal 
+          <PrivRequestModal
             key={index}
-            isModalOpen={item.isModalOpen} 
+            isModalOpen={item.isModalOpen}
             onConfirmInvitation={this.confirmPrivInvitation}
             onRejectInvitation={this.rejectPrivInvitation}
             onCloseModal={() => this.closePrivInvitationModal(index)}
@@ -110,14 +117,14 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
       }
       {
         (rejections.length > 0 && rejections.map((item, index) => (
-          <PrivRejectModal 
+          <PrivRejectModal
             key={index}
             isModalOpen={item.isModalOpen}
             onCloseModal={() => this.closePrivRejectionModal(index)}
             invitingUser={item.invitingUser}
-          />  
+          />
         )))
-      }      
+      }
       {
         rooms.length > 0 ? (
           rooms.map((singleRoom, index) => {
@@ -128,20 +135,22 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
         )
       }
     </div>
-  }      
+  }
 }
 
-const mapStateToProps: (store: AppState, ownProps: Props.ChatAppProps) => Props.ChatAppStateProps = 
+const mapStateToProps: (store: AppState, ownProps: Props.ChatAppProps) => Props.ChatAppStateProps =
   (state, ownProps) => ({
     rooms: state.rooms
   });
 
   const mapDispatchToProps: (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.ChatAppDispatchProps) =>
-    Props.ChatAppDispatchProps = 
+    Props.ChatAppDispatchProps =
     (dispatch, ownProps) => ({
-      addUserToRoom: (newUser: User) => 
+      addUserToRoom: (newUser: User) =>
         dispatch(addUserToRoom(newUser.roomName, newUser.socketId, newUser.nickname)),
       createPrivateRoom: (roomName: string) => dispatch(createNewRoom(roomName, false, true)),
+      deleteUserFromRoom: (roomName: string, socketId: string) => dispatch(deleteUserFromRoom(roomName, socketId)),
+      deleteRoom: (roomName: string) => dispatch(deleteRoom(roomName))
     })
 
 export default connect<Props.ChatAppStateProps, Props.ChatAppDispatchProps, any, any>
