@@ -1,10 +1,12 @@
 // MessagesStoreProps
-// MessagesDispatchProps
-export interface MessagesStandardProps { 
+export interface MessagesDispatchProps {
+  addNewMessage: (roomName: string, nickname: string, message: string) => void
+}
+export interface MessagesStandardProps {
   roomName: string
 }
 export interface MessagesState {
   messages: string[]
 };
 
-export type MessagesProps = MessagesStandardProps & MessagesState;
+export type MessagesProps = MessagesDispatchProps & MessagesStandardProps;

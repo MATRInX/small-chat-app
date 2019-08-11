@@ -1,9 +1,13 @@
 import React from 'react';
-import { MessagesStandardProps, MessagesState } from './types';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { MessagesStandardProps, MessagesState, MessagesDispatchProps, MessagesProps } from './types';
+import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import Socket from '../../socket/index';
+import { addNewMessage } from '../../redux/actions/socketIO/room';
 
-export default class Messages extends React.Component<MessagesStandardProps, MessagesState> {
-  constructor(props: MessagesStandardProps) {
+export class Messages extends React.Component<MessagesProps, MessagesState> {
+  constructor(props: MessagesProps) {
     super(props);
     this.state = {
       messages: []
@@ -19,6 +23,7 @@ export default class Messages extends React.Component<MessagesStandardProps, Mes
   addMessage = (roomName: string, nickname:string, message: string) => {
     if (roomName === this.props.roomName) {
       if (!this.__Unounted) {
+        this.props.addNewMessage(roomName, nickname, message);
         this.setState({ messages: [...this.state.messages, nickname+' '+message] });
       }
     }
@@ -45,3 +50,10 @@ export default class Messages extends React.Component<MessagesStandardProps, Mes
     )
   }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: MessagesDispatchProps) => ({
+  addNewMessage: (roomName: string, nickname: string, message: string) =>
+    dispatch(addNewMessage(roomName, nickname, message))
+});
+
+export default connect<any, MessagesDispatchProps, any, any>(null, mapDispatchToProps)(Messages);
