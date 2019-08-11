@@ -7,16 +7,17 @@ export interface InputBarStoreProps {
 };
 
 export interface InputBarDispatchProps {
-  setUserTyping: (roomName: string, nickname: string, isTyping: boolean) => void
+  setUserTyping: (roomName: string, nickname: string, isTyping: boolean) => void,
+  addNewMessage: (roomName: string, nickname: string, message: string) => void
 };
 
-export interface InputBarStandardProps { 
+export interface InputBarStandardProps {
   nickname: string,
   roomName: string
 };
 
 export interface InputBarState {
-  message: string, 
+  message: string,
   typings: boolean,
   typingsUsername: string,
   timeout: any

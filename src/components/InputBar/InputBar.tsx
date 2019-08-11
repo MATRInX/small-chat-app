@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { AppState } from '../../redux/store/configureStore';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { setUserTyping } from '../../redux/actions/socketIO/user';
+import { addNewMessage } from '../../redux/actions/socketIO/room';
 import getActualUser from '../../redux/selectors/getActualUser';
 import getAllTypingsUsers from '../../redux/selectors/getAllTypingsUsers';
 
@@ -37,6 +38,7 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
     const { message, timeout } = this.state;
     event.preventDefault();
     Socket.to.sendMessage(roomName, nickname, message);
+    this.props.addNewMessage(roomName, nickname, message);
     this.setState({ message: '' });
 
     clearTimeout(timeout);
@@ -104,8 +106,11 @@ const mapStateToProps: (store: AppState, ownProps: InputBarProps) => InputBarSto
   });
 
 const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: InputBarDispatchProps) => ({
-  setUserTyping: (roomName: string, nickname: string, isTyping: boolean) => {
+  setUserTyping: (roomName: string, nickname: string, isTyping: boolean): void => {
     dispatch(setUserTyping(roomName, nickname, isTyping))
+  },
+  addNewMessage: (roomName: string, nickname: string, message: string): void => {
+    dispatch(addNewMessage(roomName, nickname, message))
   }
 })
 
