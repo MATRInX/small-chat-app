@@ -1,4 +1,8 @@
-// MessagesStoreProps
+import { Message } from '../../redux/store/types';
+
+export interface MessagesStoreProps {
+  roomMessages: Message[]
+}
 export interface MessagesDispatchProps {
   addNewMessage: (roomName: string, nickname: string, message: string) => void
 }
@@ -9,4 +13,4 @@ export interface MessagesState {
   messages: string[]
 };
 
-export type MessagesProps = MessagesDispatchProps & MessagesStandardProps;
+export type MessagesProps = MessagesStoreProps & MessagesDispatchProps & MessagesStandardProps;

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { MessagesStandardProps, MessagesState, MessagesDispatchProps, MessagesProps } from './types';
+import { MessagesStoreProps, MessagesState, MessagesDispatchProps, MessagesProps } from './types';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
+import { AppState } from '../../redux/store/configureStore';
 import Socket from '../../socket/index';
 import { addNewMessage } from '../../redux/actions/socketIO/room';
+import getRoomMessages from '../../redux/selectors/getRoomMessages';
 
 export class Messages extends React.Component<MessagesProps, MessagesState> {
   constructor(props: MessagesProps) {
@@ -37,9 +39,9 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
     return (
       <ul id="messages">
       {
-        this.state.messages.length > 0 ? (
-          this.state.messages.map((message, index) => (
-            <li key={index}>{message}</li>
+        this.props.roomMessages.length > 0 ? (
+          this.props.roomMessages.map((message, index) => (
+            <li key={index}>{message.nickname} - {message.message}</li>
           )
         )
         ) : (
@@ -51,9 +53,15 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
   }
 }
 
+const mapStateToProps: (store: AppState, ownProps: MessagesProps) => MessagesStoreProps =
+(store, ownProps) => ({
+  roomMessages: getRoomMessages(store.rooms, ownProps.roomName)
+});
+
 const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: MessagesDispatchProps) => ({
   addNewMessage: (roomName: string, nickname: string, message: string) =>
     dispatch(addNewMessage(roomName, nickname, message))
 });
 
-export default connect<any, MessagesDispatchProps, any, any>(null, mapDispatchToProps)(Messages);
+export default connect<MessagesStoreProps, MessagesDispatchProps, any, any>
+  (mapStateToProps, mapDispatchToProps)(Messages);
