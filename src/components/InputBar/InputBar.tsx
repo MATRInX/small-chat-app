@@ -33,9 +33,16 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
   }
 
   onSubmit = (event: FormEvent<EventTarget>): void => {
+    const { roomName, nickname, setUserTyping } = this.props;
+    const { message, timeout } = this.state;
     event.preventDefault();
-    Socket.to.sendMessage(this.props.roomName, this.props.nickname, this.state.message);
+    Socket.to.sendMessage(roomName, nickname, message);
     this.setState({ message: '' });
+
+    clearTimeout(timeout);
+    Socket.to.emitUserTypings(roomName, nickname, false);
+    setUserTyping(roomName, nickname, false);
+    this.setState({ timeout });
   }
 
   onChange = (event: FormEvent<EventTarget>): void => {
