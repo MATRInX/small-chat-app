@@ -24,6 +24,16 @@ export const deleteRoom: (roomName: string) => SocketIOActionTypes =
   }
 });
 
+export const addNewMessage: (roomName: string, nickname: string, message: string) => SocketIOActionTypes =
+(roomName, nickname, message) => ({
+  type: SocketIOActionTypesEnum.ADD_NEW_MESSAGE,
+  payload: {
+    roomName,
+    nickname,
+    message
+  }
+})
+
 // // send room broadcast
 // export const sendRoomBroadcast: (roomName: string, message: string) => SocketIOActionTypes =
 //   (roomName, message) => ({

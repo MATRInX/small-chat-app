@@ -3,10 +3,16 @@ export interface Action<PayloadType> {
   payload?: PayloadType
 };
 
+export interface Message {
+  nickname: string,
+  message: string
+}
+
 export interface Room {
   roomName: string,
   isFixed: boolean,
-  isPrivate: boolean
+  isPrivate: boolean,
+  messages: Message[]
 };
 
 export interface User {

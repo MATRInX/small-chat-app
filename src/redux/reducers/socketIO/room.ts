@@ -13,7 +13,8 @@ export const roomReducer: Reducer<RoomState> =
           {
             roomName: action.payload.roomName,
             isFixed: action.payload.isFixed,
-            isPrivate: action.payload.isPrivate
+            isPrivate: action.payload.isPrivate,
+            messages: []
           }
         ]
       case SocketIOActionTypesEnum.DELETE_ROOM:
@@ -24,6 +25,19 @@ export const roomReducer: Reducer<RoomState> =
           }
           return true;
         })
+      case SocketIOActionTypesEnum.ADD_NEW_MESSAGE:
+        const newState = state.map(room => {
+          if (room.roomName === action.payload.roomName) {
+            room.messages = [...room.messages, {
+              nickname: action.payload.nickname,
+              message: action.payload.message
+            }]
+            return room;
+          } else {
+            return room;
+          }
+        });
+        return newState;
       default:
         return [
             ...state
