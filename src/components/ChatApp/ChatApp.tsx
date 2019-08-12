@@ -13,6 +13,8 @@ import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { addUserToRoom, deleteUserFromRoom } from '../../redux/actions/socketIO/user';
 import { createNewRoom, deleteRoom } from '../../redux/actions/socketIO/room';
 import { PrivRejectInfoModalStandardProps, PrivRejectModalInfo } from '../PrivRejectInfoModal/types';
+import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   constructor(props: Props.ChatAppProps) {
@@ -125,15 +127,34 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
           />
         )))
       }
-      {
-        rooms.length > 0 ? (
-          rooms.map((singleRoom, index) => {
-            return <ChatWindow key={index} roomName={singleRoom.roomName} />
-          })
-        ) : (
-          <div>There is no rooms...</div>
-        )
-      }
+      <Tabs>
+        <TabList>
+          <Tab>Select Your room!</Tab>
+          {
+            rooms.length > 0 ?
+            (
+              rooms.map((singleRoom, index) => {
+                return <Tab key={index}>{singleRoom.roomName}</Tab>
+              })
+            ) : (
+              <Tab>There is no rooms...</Tab>
+            )
+          }
+        </TabList>
+        <TabPanel>Select Your room...</TabPanel>
+        {
+          rooms.length > 0 ?
+          (
+            rooms.map((singleRoom, index) => {
+              return <TabPanel key={index}>
+                <ChatWindow key={index} roomName={singleRoom.roomName} />
+              </TabPanel>
+            })
+          ) : (
+            <TabPanel>There is no rooms...</TabPanel>
+          )
+        }
+      </Tabs>
     </div>
   }
 }
