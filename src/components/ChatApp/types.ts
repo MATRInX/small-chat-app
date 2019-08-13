@@ -5,7 +5,8 @@ import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { User } from '../../redux/store/types';
 
 export interface ChatAppStateProps {
-  rooms: Room[]
+  rooms: Room[],
+  joinedUsers: User[]
 }
 
 export interface ChatAppDispatchProps {

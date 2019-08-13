@@ -5,6 +5,7 @@ import ChatWindow from '../ChatWindow/ChatWindow';
 import * as Props from './types';
 import { AppState } from '../../redux/store/configureStore';
 import Socket from '../../socket/index';
+import { socket as clientSocket } from '../../index';
 import { User } from '../../redux/store/types';
 import PrivRequestModal from '../PrivRequestModal/PrivRequestModal';
 import PrivRejectModal from '../PrivRejectInfoModal/PrivRejectInfoModal';
@@ -14,6 +15,7 @@ import { addUserToRoom, deleteUserFromRoom } from '../../redux/actions/socketIO/
 import { createNewRoom, deleteRoom } from '../../redux/actions/socketIO/room';
 import { PrivRejectInfoModalStandardProps, PrivRejectModalInfo } from '../PrivRejectInfoModal/types';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
+import isUserLoggedInRoom from '../../redux/selectors/isUserLoggedInRoom';
 import 'react-tabs/style/react-tabs.css';
 
 export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
@@ -131,28 +133,38 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
         <TabList>
           <Tab>Select Your room!</Tab>
           {
-            rooms.length > 0 ?
-            (
-              rooms.map((singleRoom, index) => {
-                return <Tab key={index}>{singleRoom.roomName}</Tab>
+            // rooms.length > 0 ?
+            // (
+              // rooms.length > 0 && rooms.map((singleRoom, index) => {
+              //   return  <Tab key={index}>{singleRoom.roomName}</Tab>
+              // })
+
+              rooms.filter((singleRoom, index) => {
+                return isUserLoggedInRoom(this.props.joinedUsers, singleRoom.roomName, clientSocket.id)
+              }).map((singleRoom, index) => {
+                return  <Tab key={index}>{singleRoom.roomName}</Tab>
               })
-            ) : (
-              <Tab>There is no rooms...</Tab>
-            )
+
+              // isUserLoggedInRoom
+            // ) : (
+            //   <Tab>There is no rooms...</Tab>
+            // )
           }
         </TabList>
         <TabPanel>Select Your room...</TabPanel>
         {
-          rooms.length > 0 ?
-          (
-            rooms.map((singleRoom, index) => {
+          // rooms.length > 0 ?
+          // (
+            rooms.length > 0 && rooms.filter((singleRoom, index) => {
+              return isUserLoggedInRoom(this.props.joinedUsers, singleRoom.roomName, clientSocket.id)
+            }).map((singleRoom, index) => {
               return <TabPanel key={index}>
                 <ChatWindow key={index} roomName={singleRoom.roomName} />
               </TabPanel>
             })
-          ) : (
-            <TabPanel>There is no rooms...</TabPanel>
-          )
+          // ) : (
+          //   <TabPanel>There is no rooms...</TabPanel>
+          // )
         }
       </Tabs>
     </div>
@@ -161,7 +173,8 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
 
 const mapStateToProps: (store: AppState, ownProps: Props.ChatAppProps) => Props.ChatAppStateProps =
   (state, ownProps) => ({
-    rooms: state.rooms
+    rooms: state.rooms,
+    joinedUsers: state.joinedUsers
   });
 
   const mapDispatchToProps: (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.ChatAppDispatchProps) =>
