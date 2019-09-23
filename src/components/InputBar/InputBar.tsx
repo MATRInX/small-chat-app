@@ -80,7 +80,7 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
 
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
+      <form className="chat-window__input-bar" onSubmit={this.onSubmit}>
       {this.props.typingsUsers.length > 0 ?
         <div>User {`${this.props.typingsUsers.map(u => u.nickname).join(',')}`} {this.props.typingsUsers.length===1 ? 'is' : 'are'} typings...</div> :
         <div></div>}

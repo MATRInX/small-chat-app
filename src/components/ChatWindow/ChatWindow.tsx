@@ -93,24 +93,26 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
   render() {
 
     return (
-      <div>
-        <h1>Room {this.props.roomName}</h1>
+      <div >
+        {/* <h1 className="chat-window__header">Room {this.props.roomName}</h1> */}
         {
           !this.props.isUserLoggedInRoom ? (
-            <div>
-              <form onSubmit={this.onSubmit}>
-                <input
-                  type="text"
-                  onChange={this.onChange}
-                  value={this.state.nickname}
-                  placeholder="Enter your nickname..."
-                />
-                <button>Join chat room</button>
-              </form>
-            </div>
+            <span>No logged user</span>
+            // <div>
+            //   <form onSubmit={this.onSubmit}>
+            //     <input
+            //       type="text"
+            //       onChange={this.onChange}
+            //       value={this.state.nickname}
+            //       placeholder="Enter your nickname..."
+            //     />
+            //     <button>Join chat room</button>
+            //   </form>
+            // </div>
           ) : (
-            <div>
-              <button onClick={this.onRoomLeave}>Leave room</button>
+            <div className="chat-window">
+              <h1 className="chat-window__header">Room {this.props.roomName}</h1>
+              <button className="btn--logout" onClick={this.onRoomLeave}>Leave room</button>
               <Messages roomName={this.props.roomName}/>
               <InputBar nickname={this.props.actualUser.nickname} roomName={this.props.roomName}/>
               <OnlineUsers roomName={this.props.roomName}/>

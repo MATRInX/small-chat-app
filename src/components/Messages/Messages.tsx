@@ -37,7 +37,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
 
   render() {
     return (
-      <ul id="messages">
+      <ul id="messages" className="chat-window__messages">
       {
         this.props.roomMessages.length > 0 ? (
           this.props.roomMessages.map((message, index) => (

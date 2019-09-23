@@ -11,7 +11,8 @@ export const OnlineUsers = (props: OnlineUsersProps) => {
     console.log('priv invitation have been send,,,');
   }
   return (
-    <div><span>Online users:</span>
+    <div className="chat-window__online-users">
+      <span>Online users:</span>
       <ul>
         {
           props.users.length === 0 ? (
@@ -28,7 +29,7 @@ export const OnlineUsers = (props: OnlineUsersProps) => {
     )
 }
 
-const mapStateToProps: (store: AppState, ownProps: OnlineUsersProps) => OnlineUsersStoreProps = 
+const mapStateToProps: (store: AppState, ownProps: OnlineUsersProps) => OnlineUsersStoreProps =
   (store, ownProps) => ({
     users: getOnlineUsers(store.joinedUsers, ownProps.roomName)
   });
