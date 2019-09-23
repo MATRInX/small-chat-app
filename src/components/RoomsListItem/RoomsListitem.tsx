@@ -34,16 +34,17 @@ export const RoomsListItem = (props: Props.RoomsListItemProps) => {
   }
 
   return (
-    <div>
-      <h3><a>{props.roomName}</a></h3>
+    <div className="single-room">
+      <h3 className="single-room__name"><a>{props.roomName}</a></h3>
       <form onSubmit={onSubmit}>
         <input
+          className="text-input"
           type="text"
           onChange={onChange}
           value={nickname}
           placeholder="Enter your nickname..."
         />
-        <button>Join chat room</button>
+        <button className="btn">Join chat room</button>
       </form>
     </div>
   )

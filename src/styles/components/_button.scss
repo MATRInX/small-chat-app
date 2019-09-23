@@ -1,0 +1,15 @@
+.btn {
+  align-self: center;
+  background-color: $grey;
+  border: none;
+  border-radius: $s-size;
+  justify-self: end;
+  height: 100%;
+  padding: $s-size $xl-size;
+  text-decoration: none;
+  transition: border-radius .2s ease-in-out;
+}
+
+.btn:hover {
+  border-radius: 0;
+}

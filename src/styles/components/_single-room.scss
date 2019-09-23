@@ -1,0 +1,25 @@
+.single-room {
+  background-color: $dark-grey;
+  border: none;
+  border-radius: $s-size;
+
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+
+  margin-bottom: $s-size;
+  max-width: $desktop-breakpoint;
+  padding: $m-size;
+
+  &__name {
+    grid-row: 1 / 2;
+    margin: 0;
+    padding: 0 0 $s-size $s-size/2;
+    text-transform: uppercase;
+  }
+
+  & form {
+    grid-row: 2 / 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
