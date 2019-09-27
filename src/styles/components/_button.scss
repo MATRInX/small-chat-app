@@ -15,5 +15,9 @@
 }
 
 .btn--logout {
+  align-self: center;
   grid-area: logout;
+  height: min-content;
+  justify-self: center;
+  width: min-content;
 }

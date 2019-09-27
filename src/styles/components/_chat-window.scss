@@ -1,7 +1,17 @@
+@mixin standardAnimation($name, $time, $count, $function) {
+  animation-name: $name;
+  animation-duration: $time;
+  animation-fill-mode: both;
+  animation-iteration-count: $count;
+  animation-timing-function: $function;
+}
+
 .chat-window {
+  background-color: $dark-grey;
+  border-radius: $s-size;
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr 3fr 1fr;
+  grid-template-columns: [content] 3fr [sidebar] 1fr [end];
+  grid-template-rows: [room-header] 1fr [messages] 4fr [input-bar] .5fr [end];
   grid-template-areas:
   "header logout"
   "messages onlineUsers"
@@ -10,18 +20,73 @@
   margin: 0 auto;
 
   &__header {
-    grid-area: header;
+    align-self: center;
+    @include standardAnimation(letterChange, 1.5s, 1, ease-in-out);
+    grid-area: header; // room-header / content / room-header / sidebar
+    justify-self: center;
   }
 
   &__input-bar {
-    grid-area: inputBar;
+    grid-area: inputBar; // input-bar / content / input-bar / end
   }
 
   &__messages {
-    grid-area: messages;
+    align-self: center;
+    background-color: white;
+    border-radius: $s-size;
+    grid-area: messages; // messages / content / messages / sidebar
+    justify-self: center;
+    height: 40.0rem;
+    padding: 1.0rem;
+    width: 90%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+
+    &:hover {
+      overflow-y: scroll;
+    }
+
+    & li {
+      list-style: none;
+      position: relative;
+      @include standardAnimation(movingMessage, .4s, 1, ease-out);
+    }
+
+    &-items-left {
+      text-align: left;
+    }
+
+    &-items-right {
+      text-align: right;
+    }
+
   }
 
   &__online-users {
-    grid-area: onlineUsers;
+    grid-area: onlineUsers; // messages / sidebar / messages / end
+  }
+}
+
+
+
+@keyframes letterChange {
+  from {
+    letter-spacing: initial;
+  }
+
+  to {
+    letter-spacing: 7px;
+  }
+}
+
+@keyframes movingMessage {
+  0% {
+    right: -200px;
+  }
+  70% {
+    right: 15px;
+  }
+  100% {
+    right: 0px;
   }
 }

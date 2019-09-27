@@ -112,8 +112,8 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
           ) : (
             <div className="chat-window">
               <h1 className="chat-window__header">Room {this.props.roomName}</h1>
-              <button className="btn--logout" onClick={this.onRoomLeave}>Leave room</button>
-              <Messages roomName={this.props.roomName}/>
+              <button className="btn btn--logout" onClick={this.onRoomLeave}>Leave room</button>
+              <Messages nickname={this.props.actualUser.nickname} roomName={this.props.roomName}/>
               <InputBar nickname={this.props.actualUser.nickname} roomName={this.props.roomName}/>
               <OnlineUsers roomName={this.props.roomName}/>
             </div>

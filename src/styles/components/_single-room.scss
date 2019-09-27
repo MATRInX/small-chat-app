@@ -4,22 +4,22 @@
   border-radius: $s-size;
 
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: [header] 1fr [login-bar] 1fr;
 
   margin-bottom: $s-size;
   max-width: $desktop-breakpoint;
   padding: $m-size;
 
   &__name {
-    grid-row: 1 / 2;
+    grid-row: header;
     margin: 0;
     padding: 0 0 $s-size $s-size/2;
     text-transform: uppercase;
   }
 
   & form {
-    grid-row: 2 / 3;
+    grid-row: login-bar;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: [input] 1fr [submit] 1fr;
   }
 }
