@@ -13,7 +13,7 @@ import Socket from '../../socket/index';
 
 export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
   const { user, createPrivateRoom, actualUser , addUserToPrivateRoom } = props;
-  const onClick = () => {    
+  const onClick = () => {
     const roomName: string = `private-${user.nickname}`;
     const newUser:User = {
       ...actualUser,
@@ -29,7 +29,7 @@ export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
       {user.nickname}
       {
         props.actualUser.nickname !== user.nickname ? (
-          <button onClick={onClick}>Priv</button>
+          <button className="btn btn--priv" onClick={onClick}>Priv</button>
         ) : (<span></span>)
       }
     </li>
@@ -41,7 +41,7 @@ const mapStateToProps: (state: AppState, ownProps: Props.OnlineUsersItemProps) =
     actualUser: getActualUser(store.joinedUsers, socket.id)
   })
 
-const mapDispatchToProps: (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.OnlineUsersItemProps) => Props.OnlineUsersItemDispatchProps = 
+const mapDispatchToProps: (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.OnlineUsersItemProps) => Props.OnlineUsersItemDispatchProps =
   (dispatch, ownProps) => ({
     createPrivateRoom: (roomName: string) => dispatch(createNewRoom(roomName, false, true)),
     addUserToPrivateRoom: (roomName:string, newUser: User) => dispatch(addUserToRoom(roomName, newUser.socketId, newUser.nickname))

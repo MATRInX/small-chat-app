@@ -16,7 +16,7 @@
   "header logout"
   "messages onlineUsers"
   "inputBar inputBar";
-  width: 600px;
+  width: 65%;
   margin: 0 auto;
 
   &__header {
@@ -39,12 +39,8 @@
     height: 40.0rem;
     padding: 1.0rem;
     width: 90%;
-    overflow-y: hidden;
+    overflow-y: scroll;
     overflow-x: hidden;
-
-    &:hover {
-      overflow-y: scroll;
-    }
 
     & li {
       list-style: none;
@@ -64,6 +60,28 @@
 
   &__online-users {
     grid-area: onlineUsers; // messages / sidebar / messages / end
+
+    span {
+      display: block;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    ul {
+      padding: $s-size;
+      margin: 0;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        border-radius: $s-size;
+        background-color: white;
+        list-style: none;
+        padding: $s-size/2 $m-size;
+        text-align: left;
+        margin-bottom: $s-size/2;
+      }
+    }
   }
 }
 

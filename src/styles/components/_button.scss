@@ -21,3 +21,12 @@
   justify-self: center;
   width: min-content;
 }
+
+.btn--priv {
+  padding: 0.2rem $s-size;
+  transition: none;
+}
+
+.btn--priv:hover {
+  border-radius: $s-size;
+}
