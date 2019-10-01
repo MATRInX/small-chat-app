@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState, useEffect, SFC } from 'react';
 import { socket } from '../../index';
 import { InputBarStoreProps, InputBarState, InputBarProps, InputBarDispatchProps } from './types';
 import { SOCKET_EVENTS } from '../../utils/consts';
@@ -80,18 +80,26 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
   }
 
   render() {
+    const { typingsUsers } = this.props;
+    const users = typingsUsers.map(u => u.nickname).join(',');
+    const areTypings = typingsUsers.length === 1 ? 'is' : 'are';
+
     return (
       <form className="chat-window__input-bar" onSubmit={this.onSubmit}>
       {/* {this.props.typingsUsers.length > 0 ?
         <div className="chat-window__typings">User {`${this.props.typingsUsers.map(u => u.nickname).join(',')}`} {this.props.typingsUsers.length===1 ? 'is' : 'are'} typings...</div> :
         <div></div>} */}
 
-        <div className={"chat-window__typings" + (this.props.typingsUsers.length > 0 ? ' widzialny' : ' niewidzialny')}>User is typings...</div> :
+        {/* <div className={"chat-window__typings" + (this.props.typingsUsers.length > 0 ? ' widzialny' : ' niewidzialny')}>User is typings...</div> : */}
 
         {/* <div className="chat-window__typings">
           {this.props.typingsUsers.length > 0 ? `User ${this.props.typingsUsers.map(u => u.nickname).join(',')}`: ""}
         </div> */}
         {/* <div className="chat-window__typings">User is typing</div> */}
+        <Fade className="chat-window__typings" show={typingsUsers.length > 0}>
+          {/* <div>{`Users ${users} ${areTypings} typing...`}</div> */}
+          {`Users ${users} ${areTypings} typing...`}
+        </Fade>
         <input
           id="message"
           type="text"
@@ -125,3 +133,33 @@ const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: I
 })
 
 export default connect<InputBarStoreProps, InputBarDispatchProps, any, any>(mapStateToProps, mapDispatchToProps)(InputBar);
+
+interface FadeProps {
+  show: Boolean,
+  className: string
+}
+
+const Fade: SFC<FadeProps> = ({show, className, children}) => {
+  const [shouldRender, setRender] = useState(show);
+
+  useEffect(() => {
+    if (show) setRender(true);
+  }, [show]);
+
+  const onAnimationEnd = () => {
+    if (!show) setRender(false);
+  };
+
+  return (
+    shouldRender && (
+      <div
+        className={className}
+        // style={{ animation: `${show ? "movingFromTop" : "movingToTop"} 1s ease-in-out 0s 1 normal both` }}
+        style={{ animationName: `${show ? "movingFromTop" : "movingToTop"}` }}
+        onAnimationEnd={onAnimationEnd}
+      >
+        {children}
+      </div>
+    )
+  );
+};
