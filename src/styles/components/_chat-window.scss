@@ -26,8 +26,31 @@
     justify-self: center;
   }
 
+  &__typings {
+    position: absolute;
+    font-size: $s-size;
+    color: blue;
+    margin-left: 4.6rem;
+    transition: all 2s ease-in-out;
+    // top: -1.4rem;
+    // animation-name: movingFromTop;
+    // animation-fill-mode: both;
+    // animation-iteration-count: 1;
+    // animation-timing-function: ease-in-out;
+  }
+
+  .widzialny {
+    top: -14px;
+  }
+
+  .niewidzialny {
+    top: -40px;
+  }
+
   &__input-bar {
     grid-area: inputBar; // input-bar / content / input-bar / end
+    padding-top: $s-size/2;
+    position: relative;
   }
 
   &__messages {
@@ -106,5 +129,14 @@
   }
   100% {
     right: 0px;
+  }
+}
+
+@keyframes movingFromTop {
+  from {
+    top: -4.0rem;
+  }
+  to {
+    top: -1.4rem;
   }
 }

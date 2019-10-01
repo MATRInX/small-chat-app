@@ -11,6 +11,7 @@ import { setUserTyping } from '../../redux/actions/socketIO/user';
 import { addNewMessage } from '../../redux/actions/socketIO/room';
 import getActualUser from '../../redux/selectors/getActualUser';
 import getAllTypingsUsers from '../../redux/selectors/getAllTypingsUsers';
+import { TransitionGroup } from 'react-transition-group';
 
 export class InputBar extends React.Component<InputBarProps, InputBarState> {
   constructor(props: InputBarProps) {
@@ -81,19 +82,28 @@ export class InputBar extends React.Component<InputBarProps, InputBarState> {
   render() {
     return (
       <form className="chat-window__input-bar" onSubmit={this.onSubmit}>
-      {this.props.typingsUsers.length > 0 ?
-        <div>User {`${this.props.typingsUsers.map(u => u.nickname).join(',')}`} {this.props.typingsUsers.length===1 ? 'is' : 'are'} typings...</div> :
-        <div></div>}
-        <span>{this.props.nickname}</span>
+      {/* {this.props.typingsUsers.length > 0 ?
+        <div className="chat-window__typings">User {`${this.props.typingsUsers.map(u => u.nickname).join(',')}`} {this.props.typingsUsers.length===1 ? 'is' : 'are'} typings...</div> :
+        <div></div>} */}
+
+        <div className={"chat-window__typings" + (this.props.typingsUsers.length > 0 ? ' widzialny' : ' niewidzialny')}>User is typings...</div> :
+
+        {/* <div className="chat-window__typings">
+          {this.props.typingsUsers.length > 0 ? `User ${this.props.typingsUsers.map(u => u.nickname).join(',')}`: ""}
+        </div> */}
+        {/* <div className="chat-window__typings">User is typing</div> */}
         <input
           id="message"
           type="text"
+          className="text-input text-input--message"
           autoComplete="off"
+          name="message"
           value={this.state.message}
           onChange={this.onChange}
           onKeyDown={this.onKeydown}
+          placeholder={`${this.props.nickname} type here your message...`}
         />
-        <button>Send</button>
+        <button className="btn btn--send-new-message">Send</button>
       </form>
     )
   }

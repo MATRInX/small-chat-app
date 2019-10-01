@@ -8,4 +8,12 @@
   height: 100%;
   padding: 0 $s-size;
   width: 100%;
+
+  &--message {
+    font-size: $s-size;
+    height: auto;
+    padding: $s-size;
+    width: 72%;
+    margin-left: $s-size;
+  }
 }

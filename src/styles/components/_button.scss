@@ -30,3 +30,9 @@
 .btn--priv:hover {
   border-radius: $s-size;
 }
+
+.btn--send-new-message {
+  height: auto;
+  padding: $s-size;
+  margin-left: $s-size/2;
+}
