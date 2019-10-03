@@ -61,7 +61,7 @@ io.on('connection', function(socket) {
     socket.join(newUser.roomName);
     socket.to(newUser.roomName).emit(ROOM_MSG, newUser.roomName, newUser.nickname, 'A new user has joined the room: ');
     socket.to(newUser.roomName).emit(GET_YOUR_USER_DATA, newUser.socketId, newUser.roomName);
-    socket.to(newUser.roomName).emit(ADD_NEW_USER_TO_ROOM, newUser);
+    socket.broadcast.emit(ADD_NEW_USER_TO_ROOM, newUser);
   });
 
   socket.on(SEND_MY_NICKNAME, (responseUserData, destinationSocketId) => {

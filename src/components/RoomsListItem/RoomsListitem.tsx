@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Props from './types';
 import { socket as clientSocket } from '../../index';
 import Socket  from '../../socket/index';
@@ -7,35 +7,53 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { addUserToRoom } from '../../redux/actions/socketIO/user';
+import { AppState } from '../../redux/store/configureStore';
+import isNicknameFree from '../../redux/selectors/isNicknameFree';
 
 export const RoomsListItem = (props: Props.RoomsListItemProps) => {
   const [nickname, setNickname] = useState('');
+  const [validNickname, setValidNickname] = useState(true);
+
+  useEffect(() => {
+    Socket.from.onNewUserInRoom(props.addUserToRoom);
+  })
 
   const onChange = (event: React.FormEvent<EventTarget>): void => {
     const target = event.target as HTMLInputElement;
     // const nickname: string = target.value;
     setNickname(target.value);
+    setValidNickname(props.isNicknameFree(target.value))
   }
 
   const onSubmit = (event: React.FormEvent<EventTarget>): void => {
     event.preventDefault();
     if (nickname !== '') {
-      const newUser: User = {
-        roomName: props.roomName,
-        socketId: clientSocket.id,
-        nickname: nickname,
-        isTyping: false
-      };
-      Socket.to.joinRoom(newUser);
-      props.addUserToRoom(newUser);
-      Socket.from.onNewUserInRoom(props.addUserToRoom);
-      setNickname('');
+      const nicknameCheck = props.isNicknameFree(nickname);
+
+      if (nicknameCheck) {
+        const newUser: User = {
+          roomName: props.roomName,
+          socketId: clientSocket.id,
+          nickname: nickname,
+          isTyping: false
+        };
+        Socket.to.joinRoom(newUser);
+        props.addUserToRoom(newUser);
+
+        setNickname('');
+      }
+      setValidNickname(nicknameCheck);
     }
   }
 
   return (
     <div className="single-room">
-      <h3 className="single-room__name"><a>{props.roomName}</a></h3>
+      <h3 className="single-room__name">
+        <a>{props.roomName}</a>
+        {nickname !== '' &&
+         !validNickname &&
+         <span>This nickname is already in use in this room!</span>}
+      </h3>
       <form onSubmit={onSubmit}>
         <input
           className="text-input"
@@ -50,9 +68,13 @@ export const RoomsListItem = (props: Props.RoomsListItemProps) => {
   )
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.RoomsListItemProps) => ({
-  addUserToRoom: (newUser: User) =>
-    dispatch(addUserToRoom(newUser.roomName, newUser.socketId, newUser.nickname))
+const mapStateToProps = (store: AppState, ownProps: Props.RoomsListItemProps) => ({
+  isNicknameFree: (nickname:string) => isNicknameFree(store.joinedUsers, ownProps.roomName, nickname)
 });
 
-export default connect<any, Props.RoomsListitemDispatchProps, any, any>(null, mapDispatchToProps)(RoomsListItem);
+const mapDispatchToProps = (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.RoomsListItemProps) => ({
+  addUserToRoom: (newUser: User) => dispatch(addUserToRoom(newUser.roomName, newUser.socketId, newUser.nickname))
+});
+
+export default connect<Props.RoomsListItemStoreProps, Props.RoomsListitemDispatchProps, any, any>
+  (mapStateToProps, mapDispatchToProps)(RoomsListItem);
