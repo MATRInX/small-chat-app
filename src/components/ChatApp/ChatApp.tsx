@@ -130,18 +130,20 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
           />
         )))
       }
-      <Tabs>
+      <Tabs
+        forceRenderTabPanel={true}
+      >
         <TabList>
           <Tab>Select Your room!</Tab>
           {
             rooms.filter((singleRoom, index) => {
               return isUserLoggedInRoom(this.props.joinedUsers, singleRoom.roomName, clientSocket.id)
             }).map((singleRoom, index) => {
-              return  <Tab key={index}>{singleRoom.roomName}</Tab>
+              return  <Tab style={{ textTransform: 'uppercase' }} key={index}>{singleRoom.roomName}</Tab>
             })
           }
         </TabList>
-        <TabPanel><RoomsList rooms={this.props.rooms}/></TabPanel>
+        <TabPanel><RoomsList rooms={this.props.rooms} users={this.props.joinedUsers}/></TabPanel>
         {
           rooms.length > 0 && rooms.filter((singleRoom, index) => {
             return isUserLoggedInRoom(this.props.joinedUsers, singleRoom.roomName, clientSocket.id)

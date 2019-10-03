@@ -1,9 +1,10 @@
-import { Room } from '../../redux/store/types';
+import { Room, User } from '../../redux/store/types';
 
 // RoomsListStoreProps
 // RoomsListDispatchProps
 export interface RoomsListStandardProps {
-  rooms: Room[]
+  rooms: Room[],
+  users: User[]
 };
 // RoomsListState
 
