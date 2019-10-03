@@ -25,10 +25,17 @@ export default class PrivRequestModal extends Component<Props.PrivRequestModalPr
       <Modal
         isOpen={isModalOpen}
         onRequestClose={onCloseModal}
+        shouldCloseOnOverlayClick={false}
+        className="modal__window"
+        overlayClassName="modal__overlay"
       >
-        User {invitingUser} ask you to join priv room: {roomName}
-        <button onClick={this.confirmInvitation}>Approve invitation and join room</button>
-        <button onClick={this.rejectInvitation}>Reject invitation</button>
+        <div className="modal__information">
+          User {invitingUser} ask you to join priv room: {roomName}
+        </div>
+        <div className="modal__buttons">
+          <button className="btn" onClick={this.confirmInvitation}>Approve invitation and join room</button>
+          <button className="btn" onClick={this.rejectInvitation}>Reject invitation</button>
+        </div>
       </Modal>
     </div>
   }

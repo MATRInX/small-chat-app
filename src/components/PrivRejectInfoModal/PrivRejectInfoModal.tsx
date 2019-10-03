@@ -15,12 +15,19 @@ export default class PrivRejectInfoModal extends Component<Props.PrivRejectInfoM
     const { isModalOpen, invitingUser, onCloseModal } = this.props;
     return (
       <div>
-        <Modal 
+        <Modal
           isOpen={isModalOpen}
           onRequestClose={onCloseModal}
+          shouldCloseOnOverlayClick={false}
+          className="modal__window"
+          overlayClassName="modal__overlay"
         >
-          User {invitingUser} has rejected your priv invitation.
-          <button onClick={this.closeModal}>Close modal</button>
+          <div className="modal__information">
+            User {invitingUser} has rejected your priv invitation.
+          </div>
+          <div className="modal__buttons">
+            <button className="btn" onClick={this.closeModal}>Close modal</button>
+          </div>
         </Modal>
       </div>
     )
