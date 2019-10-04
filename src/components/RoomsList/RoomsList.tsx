@@ -16,6 +16,9 @@ const RoomsList = (props: Props.RoomsListProps) => {
               }
             }
           }
+          if (singleRoom.isPrivate) {
+            return false;
+          }
           return true;
         }).map((singleRoom, index) => {
           //return <p>{singleRoom.roomName}</p>
