@@ -15,7 +15,7 @@ import isRoomPrivate from '../../redux/selectors/isRoomPrivate';
 export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
   const { user, createPrivateRoom, actualUser , addUserToPrivateRoom } = props;
   const onClick = () => {
-    const roomName: string = `private-${user.nickname}`;
+    const roomName: string = `priv-from: ${actualUser.nickname} to ${user.nickname}`;
     const newUser:User = {
       ...actualUser,
       roomName
