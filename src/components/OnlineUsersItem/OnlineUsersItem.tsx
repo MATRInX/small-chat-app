@@ -10,6 +10,7 @@ import { AppState } from '../../redux/store/configureStore';
 import getActualUser from '../../redux/selectors/getActualUser';
 import { socket } from '../../index';
 import Socket from '../../socket/index';
+import isRoomPrivate from '../../redux/selectors/isRoomPrivate';
 
 export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
   const { user, createPrivateRoom, actualUser , addUserToPrivateRoom } = props;
@@ -28,7 +29,7 @@ export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
     <li>
       {user.nickname}
       {
-        props.actualUser.nickname !== user.nickname ? (
+        props.actualUser.nickname !== user.nickname && !props.isRoomPrivate ? (
           <button className="btn btn--priv" onClick={onClick}>Priv</button>
         ) : (<span></span>)
       }
@@ -38,7 +39,8 @@ export const OnlineUsersItem = (props: Props.OnlineUsersItemProps) => {
 
 const mapStateToProps: (state: AppState, ownProps: Props.OnlineUsersItemProps) => Props.OnlineUsersItemStoreProps =
   (store, ownProps) => ({
-    actualUser: getActualUser(store.joinedUsers, socket.id)
+    actualUser: getActualUser(store.joinedUsers, socket.id),
+    isRoomPrivate: isRoomPrivate(store.rooms, ownProps.user.roomName)
   })
 
 const mapDispatchToProps: (dispatch: Dispatch<SocketIOActionTypes>, ownProps: Props.OnlineUsersItemProps) => Props.OnlineUsersItemDispatchProps =
