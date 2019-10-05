@@ -7,9 +7,9 @@ import { User } from '../../redux/store/types';
 import OnlineUsersItem from '../OnlineUsersItem/OnlineUsersItem';
 
 export const OnlineUsers = (props: OnlineUsersProps) => {
-  const onClickHandle = (user: User) => {
-    console.log('priv invitation have been send,,,');
-  }
+  // const onClickHandle = (user: User) => {
+  //   //console.log('priv invitation have been send,,,');
+  // }
   return (
     <div className="chat-window__online-users">
       <span>Online users:</span>

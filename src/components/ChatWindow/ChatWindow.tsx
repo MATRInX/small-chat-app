@@ -53,6 +53,10 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
     }
   }
 
+  componentWillUnmount() {
+    Socket.fromAndTo.offGetYourUserToSocket();
+  }
+
   onChange = (event: FormEvent<EventTarget>): void => {
     const target = event.target as HTMLInputElement;
     const nickname: string = target.value;
@@ -71,7 +75,7 @@ export class ChatWindow extends React.Component<Props.ChatWindowProps, Props.Cha
       };
       Socket.to.joinRoom(newUser);
       this.props.addUserToRoom(newUser);
-      Socket.from.onNewUserInRoom(this.props.addUserToRoom);
+      //Socket.from.onNewUserInRoom(this.props.addUserToRoom);
       // this.setState({ nickname: '' });
     }
   }

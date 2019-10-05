@@ -15,9 +15,9 @@ export const RoomsListItem = (props: Props.RoomsListItemProps) => {
   const [nickname, setNickname] = useState('');
   const [validNickname, setValidNickname] = useState(true);
 
-  useEffect(() => {
-    Socket.from.onNewUserInRoom(props.addUserToRoom);
-  })
+  // useEffect(() => {
+  //   //Socket.from.onNewUserInRoom(props.addUserToRoom);
+  // })
 
   const onChange = (event: React.FormEvent<EventTarget>): void => {
     const target = event.target as HTMLInputElement;

@@ -80,6 +80,10 @@ const onGetYourUserToSocket = (myUserData: User, myRoomName: string): void => {
   })
 };
 
+const offGetYourUserToSocket = () => {
+  socket.off(SOCKET_EVENTS.getYourUserData);
+};
+
 export default {
   to: {
     connectToSocket,
@@ -102,6 +106,7 @@ export default {
     onDeleteUserFromRoom
   },
   fromAndTo: {
-    onGetYourUserToSocket
+    onGetYourUserToSocket,
+    offGetYourUserToSocket
   }
 };
