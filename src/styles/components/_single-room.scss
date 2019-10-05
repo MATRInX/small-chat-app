@@ -10,6 +10,10 @@
   max-width: $desktop-breakpoint;
   padding: $m-size;
 
+  @media (max-width: $desktop-breakpoint) {
+    grid-template-rows: [header] 1fr [login-bar] 2fr;
+  }
+
   &__name {
     grid-row: header;
     margin: 0;
@@ -35,6 +39,12 @@
     grid-row: login-bar;
     grid-template-columns: [input] 1fr [submit] 1fr;
     position: relative;
+
+
+    @media (max-width: $desktop-breakpoint) {
+      grid-template-columns: auto;
+      grid-template-rows: [input-field] 1fr [login-submit] 1fr;
+    }
   }
 }
 

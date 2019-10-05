@@ -8,6 +8,11 @@
   padding: $s-size $xl-size;
   text-decoration: none;
   transition: border-radius .2s ease-in-out;
+
+  @media (max-width: $desktop-breakpoint) {
+    width: 100%;
+    margin-top: 5px;
+  }
 }
 
 .btn:hover {
