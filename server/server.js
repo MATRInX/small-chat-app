@@ -44,7 +44,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on(USER_DISCONNECTED_FROM_ROOM, (roomName, socketId) => {
-    socket.to(roomName).emit(DELETE_USER_FROM_ROOM, roomName, socketId);
+    socket.broadcast.emit(DELETE_USER_FROM_ROOM, roomName, socketId);
     socket.leave(roomName);
     //io.to(roomName).emit(ROOM_MSG, 'Some user have left this chat room...');
   });
