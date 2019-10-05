@@ -9,6 +9,7 @@ import { SocketIOActionTypes } from '../../redux/actions/socketIO/types';
 import { addUserToRoom } from '../../redux/actions/socketIO/user';
 import { AppState } from '../../redux/store/configureStore';
 import isNicknameFree from '../../redux/selectors/isNicknameFree';
+import AnimatedDiv from '../AnimatedDiv/AnimatedDiv';
 
 export const RoomsListItem = (props: Props.RoomsListItemProps) => {
   const [nickname, setNickname] = useState('');
@@ -50,9 +51,6 @@ export const RoomsListItem = (props: Props.RoomsListItemProps) => {
     <div className="single-room">
       <h3 className="single-room__name">
         <a>{props.roomName}</a>
-        {nickname !== '' &&
-         !validNickname &&
-         <span>This nickname is already in use in this room!</span>}
       </h3>
       <form onSubmit={onSubmit}>
         <input
@@ -61,7 +59,18 @@ export const RoomsListItem = (props: Props.RoomsListItemProps) => {
           onChange={onChange}
           value={nickname}
           placeholder="Enter your nickname..."
-        />
+          />
+          {/* {nickname !== '' &&
+           !validNickname &&
+           <span className="single-room__error">This nickname is already in use in this room!</span>} */}
+          <AnimatedDiv
+            className="single-room__error"
+            startAnimation="fadeIn"
+            endAnimation="fadeOut"
+            show={nickname !== '' && !validNickname}
+          >
+            This nickname is already in use in this room!
+          </AnimatedDiv>
         <button className="btn">Join chat room</button>
       </form>
     </div>

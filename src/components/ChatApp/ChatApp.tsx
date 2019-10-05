@@ -31,6 +31,7 @@ export class ChatApp extends Component<Props.ChatAppProps, Props.ChatAppState> {
   componentDidMount() {
     Socket.from.onPrivInvitation(this.onPrivInvitation);
     Socket.from.onPrivRejection(this.onPrivRejection);
+    Socket.from.onNewUserInRoom(this.props.addUserToRoom);
   }
 
   onPrivInvitation = (actualUser: User, newUser: User, roomName: string) => {
