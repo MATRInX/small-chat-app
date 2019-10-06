@@ -23,7 +23,7 @@ export const OnlineUsers = (props: OnlineUsersProps) => {
 
   return (
     <div className={`chat-window__online-users ${isMobile ? (showMenu ? 'show' : 'hide') : ''}`} >
-      <span onClick={onClickHandle}>Online users:</span>
+      <span onClick={onClickHandle}>Online users ({props.users.length}):</span>
       <ul className={`${isMobile ? (showMenu ? 'show' : 'hide') : ''}`}>
         {
           props.users.length === 0 ? (

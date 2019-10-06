@@ -20,11 +20,18 @@
   top: 50%;
   transform: translate(-50%, -50%);
   width: 40.0rem;
+
+  @media #{$responsive-text} {
+    width: 98%;
+    padding: 1px;
+    height: 16.0rem;
+  }
 }
 
 .modal__information {
   align-self: center;
   justify-self: center;
+  text-align: center;
 }
 
 .modal__buttons {
