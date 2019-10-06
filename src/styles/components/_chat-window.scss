@@ -19,11 +19,30 @@
   width: 65%;
   margin: 0 auto;
 
+  @media #{$responsive-text} {
+    width: 100%;
+    margin: 0;
+    padding: .5rem;
+    grid-template-areas:
+    "logout"
+    "header"
+    "onlineUsers"
+    "messages"
+    "inputBar";
+    grid-template-rows: none;
+    grid-template-columns: none;
+  }
+
   &__header {
     align-self: center;
     @include standardAnimation(letterChange, 1.5s, 1, ease-in-out);
     grid-area: header; // room-header / content / room-header / sidebar
     justify-self: center;
+
+    @media #{$responsive-text} {
+      font-size: $m-size;
+      margin: 5px 0;
+    }
   }
 
   &__typings {
@@ -39,6 +58,10 @@
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-timing-function: ease-in-out;
+
+    @media #{$responsive-text} {
+      margin-left: 0;
+    }
   }
 
   .widzialny {
@@ -68,6 +91,10 @@
     overflow-x: hidden;
     z-index: 5;
 
+    @media #{$responsive-text} {
+      width: 100%;
+    }
+
     & li {
       list-style: none;
       position: relative;
@@ -86,16 +113,40 @@
 
   &__online-users {
     grid-area: onlineUsers; // messages / sidebar / messages / end
+    transition: all 1s ease-in-out;
+
+    @media #{$responsive-text} {
+      &.hide {
+        height: $s-size;
+      }
+      &.show {
+        height: auto;
+      }
+    }
 
     span {
       display: block;
       text-align: center;
       font-weight: bold;
+
+      @media #{$responsive-text} {
+        background-color: $grey;
+        border-radius: $s-size;
+      }
     }
 
     ul {
       padding: $s-size;
       margin: 0;
+
+      @media #{$responsive-text} {
+        &.hide {
+          transform: scaleY(0);
+        }
+        &.show {
+          transform: scaleY(1);
+        }
+      }
 
       li {
         display: flex;

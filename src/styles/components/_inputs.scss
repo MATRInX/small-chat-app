@@ -15,5 +15,10 @@
     padding: $s-size;
     width: 72%;
     margin-left: $s-size;
+
+    @media #{$responsive-text} {
+      width: 100%;
+      margin-left: 0;
+    }
   }
 }

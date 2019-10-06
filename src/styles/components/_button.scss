@@ -25,11 +25,21 @@
   height: min-content;
   justify-self: center;
   width: min-content;
+
+  @media #{$responsive-text} {
+    width: 100%;
+    margin: 5px 5px 0px 5px;
+  }
 }
 
 .btn--priv {
   padding: 0.2rem $s-size;
   transition: none;
+
+  @media #{$responsive-text} {
+    width: 75%;
+    padding: $s-size/2 $s-size;
+  }
 }
 
 .btn--priv:hover {
@@ -40,4 +50,8 @@
   height: auto;
   padding: $s-size;
   margin-left: $s-size/2;
+
+  @media #{$responsive-text} {
+    margin-left: 0;
+  }
 }
